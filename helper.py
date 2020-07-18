@@ -12,22 +12,24 @@ def get_link_avisos_from_tabla(config):
     return links
 
 
+def _get_text_from_aviso(bs):
+    main_text = bs.find_all("tr", {'bgcolor': '#E4ECED'})
+    return main_text[1].find_all('p')[1].get_text()
+
+
 def get_text_from_aviso(config, links):
-    heads_raw = []
+    aviso = []
 
     for link in links:
         link = config.base_url + link
         response = requests.get(link, headers=config.headers)
         bs = BeautifulSoup(response.text, 'html.parser')
-        tr = bs.find_all("tr", {'valign' : 'middle'})
+        tr = bs.find_all("tr", {'valign': 'middle'})
+
         for td in tr:
-            heads_raw.append(td.get_text().replace('\n', ''))
+            aviso.append({
+                'text': _get_text_from_aviso(bs),
+                'header': get_head_attr(pattern=config.reg_ex_head, text=td.get_text().replace('\n', ''))
+            })
 
-    return [get_head_attr(pattern=config.reg_ex_head, text=head_raw) for head_raw in heads_raw]
-
-
-
-
-
-
-
+    return aviso

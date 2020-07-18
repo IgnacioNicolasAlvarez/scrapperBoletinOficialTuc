@@ -10,7 +10,7 @@ def main(config, dates):
     config.payload['fechaboletin2'] = dates[2]
     # '15/07/2020'
     links = get_link_avisos_from_tabla(config)
-    get_text_from_aviso(config, links)
+    avisos = get_text_from_aviso(config, links)
 
 
 if __name__ == '__main__':

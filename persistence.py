@@ -1,4 +1,5 @@
 from abc import abstractmethod
+import boto3
 
 
 class Persistence:
@@ -19,3 +20,4 @@ class Strategy:
 class StrategyFile(Strategy):
     def persist(self):
         pass
+

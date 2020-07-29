@@ -11,6 +11,7 @@ def main(config, dates):
     # '15/07/2020'
     links = get_link_avisos_from_tabla(config)
     avisos = get_text_from_aviso(config, links)
+    print(avisos)
 
 
 if __name__ == '__main__':

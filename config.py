@@ -1,4 +1,5 @@
 from fake_useragent import UserAgent
+import dotenv
 
 
 class Config:
@@ -24,6 +25,10 @@ class Config:
     reg_ex_head_2 = r'Nro:\s{15}(\d{5,6})'
     reg_ex_head_3 = r'Nro:\s{15}\d{5,6}([JUICIOS|RESOLUCIONES|DECRETO].*$)'
 
-    persistence_as_file = {
-
+    dotenv.load('./dev.env')
+    DB = {
+        'DB_HOST': dotenv.get('DB_HOST'),
+        'DB_NAME': dotenv.get('DB_NAME', default=''),
+        'DB_USER': dotenv.get('DB_USER'),
+        'DB_PASS': dotenv.get('DB_PASS')
     }

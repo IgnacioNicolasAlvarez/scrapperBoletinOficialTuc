@@ -1,15 +1,10 @@
 import requests
 from bs4 import BeautifulSoup
-from helper_regex import get_head_attr
+from expresionesRegularesF import *
 
 
-def get_link_avisos_from_tabla(config):
-    response = requests.get(config.tabla_url, headers=config.headers, params=config.payload)
-    bs = BeautifulSoup(response.text, 'html.parser')
-    a_tag_list = bs.find_all("a", href=True)
-
-    links = [a_tag['href'] for a_tag in a_tag_list if a_tag['href'].startswith('aviso')]
-    return links
+def get_head_attr(pattern, text):
+    return re.findall(pattern, text)[0]
 
 
 def _get_text_from_aviso(bs):
@@ -21,20 +16,25 @@ def get_text_from_aviso(config, links):
     aviso = []
 
     for link in links:
-        link = config.base_url + link
+        link = config.URLS['base_url'] + link
         response = requests.get(link, headers=config.headers)
         bs = BeautifulSoup(response.text, 'html.parser')
         tr = bs.find_all("tr", {'valign': 'middle'})
 
-#        'header': ['29774', '15/07/2020', '231412', 'SOCIEDADES / ACHERAL SA']}]
+        #        'header': ['29774', '15/07/2020', '231412', 'SOCIEDADES / ACHERAL SA']}]
 
         for td in tr:
+            text = _get_text_from_aviso(bs)
             aviso.append({
-                'text': _get_text_from_aviso(bs),
-                'header_0': get_head_attr(pattern=config.reg_ex_head_0, text=td.get_text().replace('\n', '')),
-                'header_1': get_head_attr(pattern=config.reg_ex_head_1, text=td.get_text().replace('\n', '')),
-                'header_2': get_head_attr(pattern=config.reg_ex_head_2, text=td.get_text().replace('\n', '')),
-                'header_3': get_head_attr(pattern=config.reg_ex_head_3, text=td.get_text().replace('\n', ''))
+                'text': text,
+                'nro_boletin': get_head_attr(pattern=config.reg_ex_head_0, text=td.get_text().replace('\n', '')),
+                'fecha_aviso': get_head_attr(pattern=config.reg_ex_head_1, text=td.get_text().replace('\n', '')),
+                'nro_aviso': get_head_attr(pattern=config.reg_ex_head_2, text=td.get_text().replace('\n', '')),
+                'tipo_aviso': get_head_attr(pattern=config.reg_ex_head_3, text=td.get_text().replace('\n', '')),
+                'titulo': encontrarIdTitulo(text),
+                'fechaConstitucion': encontrarFechaConstitucion(text),
+                'CUIT': encontrarCUIT(text),
+                'capitalSocial': encontrarCapitalSocial(text) if (encontrarCapitalSocial(text) is not None) else 0.00
             })
 
     return aviso

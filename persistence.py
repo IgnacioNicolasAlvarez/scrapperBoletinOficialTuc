@@ -43,8 +43,5 @@ class StrategyDatabase(Strategy):
     def __init__(self, db_config):
         print(db_config)
 
-
     def persist(self, kwargs):
         pass
-
-

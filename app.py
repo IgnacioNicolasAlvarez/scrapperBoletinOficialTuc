@@ -1,5 +1,6 @@
 from config import Config
-from helper import get_link_avisos_from_tabla, get_text_from_aviso
+from helper import get_text_from_aviso
+from urlCatcher import get_link_avisos_from_tabla
 from persistence import *
 import sys
 
@@ -12,7 +13,8 @@ def main(config, dates):
     # '15/07/2020'
     links = get_link_avisos_from_tabla(config)
     advices = get_text_from_aviso(config, links)
-    persistence = Persistence(StrategyDatabase(config.DB))
+
+    persistence = Persistence(StrategyPrintInScreen())
 
     for a in advices:
         persistence.persist(kwargs=a)

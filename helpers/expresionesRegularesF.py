@@ -125,7 +125,7 @@ def encontrarFechaConstitucion(string):
             fecha1 = datetime.datetime.strptime(fecha, '%d/%m/%Y')
             if fecha1 > fechaMayorDate:
                 # return fecha1.strftime("%d/%m/%Y")
-                return fecha1.date()
+                return fecha1.date().strftime('%Y-%m-%d')
         except:
             pass
 

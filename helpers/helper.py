@@ -22,17 +22,17 @@ def get_dic_from_urls(config, links):
         tr = bs.find_all("tr", {'valign': 'middle'})
 
         #        'header': ['29774', '15/07/2020', '231412', 'SOCIEDADES / ACHERAL SA']}]
-
+        text = _get_text_from_aviso(bs)
         for td in tr:
-            aviso.append(create_dic(config, bs, td))
+            aviso.append(create_dic(config, text, td))
 
     return aviso
 
 
-def create_dic(config, bs, td):
-    text = _get_text_from_aviso(bs)
+def create_dic(config, text, td):
+
     return {
-        'text': text,
+        'texto': text,
         'nro_boletin': get_head_attr(pattern=config.reg_ex_head_0, text=td.get_text().replace('\n', '')),
         'fecha_aviso': get_head_attr(pattern=config.reg_ex_head_1, text=td.get_text().replace('\n', '')),
         'nro_aviso': get_head_attr(pattern=config.reg_ex_head_2, text=td.get_text().replace('\n', '')),

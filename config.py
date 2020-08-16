@@ -34,5 +34,14 @@ class Config:
         'DB_HOST': dotenv.get('DB_HOST_AWS'),
         'DB_NAME': dotenv.get('DB_NAME_AWS', default=''),
         'DB_USER': dotenv.get('DB_USER_AWS'),
-        'DB_PASS': dotenv.get('DB_PASS_AWS')
+        'DB_PASS': str(dotenv.get('DB_PASS_AWS')),
+        'DB_PORT': dotenv.get('DB_PORT_AWS', default='3306')
+    }
+
+    DB_DOCKER = {
+        'DB_HOST': dotenv.get('DB_HOST_DOCKER'),
+        'DB_NAME': dotenv.get('DB_NAME_DOCKER', default=''),
+        'DB_USER': dotenv.get('DB_USER_DOCKER'),
+        'DB_PASS': str(dotenv.get('DB_PASS_DOCKER')),
+        'DB_PORT': dotenv.get('DB_PORT_DOCKER', default='3306')
     }

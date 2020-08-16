@@ -14,10 +14,10 @@ def main(config, dates):
     urls = get_urls_avisos_from_tabla(config)
     advices = get_dic_from_urls(config, urls)
 
-    persistence = Persistence(StrategyPrintInScreen())
+    persistence = Persistence(StrategyDatabase(Config.DB_DOCKER))
 
     for a in advices:
-        persistence.persist(kwargs=a)
+        persistence.persist(dictionary=a)
 
 
 if __name__ == '__main__':

@@ -21,8 +21,10 @@ class Config:
         'TiposComunes': '0',
         'fechaboletin1': None,
         'fechaboletin2': None,
+        'offset': 0,
         'Submit': 'Buscar'
     }
+    offset_increment = 15
 
     reg_ex_head_0 = r'([0-9]{5})\s{15}'
     reg_ex_head_1 = r'(\d{2}/\d{2}/\d{4})'

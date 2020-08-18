@@ -67,12 +67,12 @@ class StrategyDatabase(Strategy):
                                 '{1}',
                                 '{get_date_in_format(dictionary['fecha_aviso'])}',
                                 '{dictionary['nro_boletin']}',
-                                '{'0'}',
-                                '{dictionary['CUIT']}',
-                                '{'0'}',
+                                '{dictionary['id_tipo_aviso']}',
+                                '{dictionary['CUIT']}', 
+                                '{'0'}', # razon social
                                 '{dictionary['fechaConstitucion']}',
-                                '{'0'}',
-                                '{'0'}',
+                                '{dictionary['id_titulo']}',
+                                '{'0'}', # id del tipo de sociedad
                                 '{dictionary['capitalSocial']}',
                                 '{dictionary['texto']}',
                                 sysdate()

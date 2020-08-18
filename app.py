@@ -15,7 +15,6 @@ def main(config, dates):
     advices = get_dic_from_urls(config, urls)
 
     persistence = Persistence(StrategyDatabase(Config.DB_DOCKER))
-
     for a in advices:
         persistence.persist(dictionary=a)
 

@@ -1,5 +1,6 @@
 import requests
 from bs4 import BeautifulSoup
+from helpers.d_wait import wait
 
 
 def get_urls_avisos_from_tabla(config):
@@ -19,6 +20,7 @@ def get_urls_avisos_from_tabla(config):
     return links
 
 
+@wait(1)
 def get_urls(url_tabla, headers, payload):
     response = requests.get(url_tabla, headers=headers, params=payload)
     bs = BeautifulSoup(response.text, 'html.parser')

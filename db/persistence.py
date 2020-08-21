@@ -50,8 +50,8 @@ class StrategyDatabase(Strategy):
 
     def persist(self, dictionary):
         connection = mysql.connector.connect()
+        cursor = None
         try:
-
             connection = mysql.connector.connect(host=self.host,
                                                  database=self.name,
                                                  user=self.user,
@@ -66,13 +66,13 @@ class StrategyDatabase(Strategy):
                         values (
                                 '{1}',
                                 '{get_date_in_format(dictionary['fecha_aviso'])}',
-                                '{dictionary['nro_boletin']}',
+                                '{dictionary['nro_aviso']}',
                                 '{dictionary['id_tipo_aviso']}',
                                 '{dictionary['CUIT']}', 
-                                '{'0'}', # razon social
+                                '{dictionary['razon_social']}', 
                                 '{dictionary['fechaConstitucion']}',
                                 '{dictionary['id_titulo']}',
-                                '{'0'}', # id del tipo de sociedad
+                                '{dictionary['id_tipo_sociedad']}',
                                 '{dictionary['capitalSocial']}',
                                 '{dictionary['texto']}',
                                 sysdate()

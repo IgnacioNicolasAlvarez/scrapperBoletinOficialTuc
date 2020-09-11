@@ -305,9 +305,9 @@ def encontrarCapitalSocialAnterior(string):  # anterior
         return 0
 
 
-def encontrarCapitalSocial(string):  # nueva versión
+def encontrarCapitalSocial(string):
     patronPrecio = re.compile(r'[0-9]+((\,[0-9]+)+)?(\.[0-9]+)?(\.[0-9]+)?(\,[0-9]+)?')
-    patron = re.compile(r'\s+')  # patron para dividir donde encuentre un espacio en blanco
+    patron = re.compile(r'\s+')
     palabras = patron.split(string)
     precios = []
     numMayor = 0
@@ -335,12 +335,13 @@ def encontrarCapitalSocial(string):  # nueva versión
                             or char == '“' or char == '”' or char == ')' or char == 'a' or char == '(' or char == 'e' \
                             or char == ":" or char == 'ª' or char == "ro" or char == "do" or char == "to" or char == '$':
                         palabra = palabra.replace(char, '')
-                        # print(palabra)
                 precios.append(palabra)
 
     for pre in precios:
-        nueva = pre.replace('.', '')
-        nuevos.append(nueva)
+        aux = re.search(".[0-9]{2}$", pre)
+        if aux:
+            pre = ''.join(list(pre)[:aux.start()])
+        nuevos.append(pre.replace('.', ''))
 
     for pre in nuevos:
         try:

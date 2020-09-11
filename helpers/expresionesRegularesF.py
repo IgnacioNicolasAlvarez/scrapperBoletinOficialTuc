@@ -261,6 +261,13 @@ def encontrarTipoSociedad(string):
         return "44"  # OTRO
 
 
+def get_razon_social(text):
+    try:
+        return re.findall(r"SOCIEDADES / (.*)", text)[0]
+    except Exception as e:
+        return None
+
+
 def encontrarCapitalSocialAnterior(string):  # anterior
     patronPrecio = re.compile(r'[0-9]+((\,[0-9]+)+)?(\.[0-9]+)?(\.[0-9]+)?(\,[0-9]+)?')
     patron = re.compile(r'\s+')  # patron para dividir donde encuentre un espacio en blanco

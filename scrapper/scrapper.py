@@ -40,7 +40,6 @@ def extract_data(links):
         for td in tr:
             descripcion_aviso = get_feature_from_tittle(pattern=Config.reg_ex_head_3,
                                                         text=td.get_text().replace('\n', ''))
-            print(descripcion_aviso)
             if isCategoriaRequerida(descripcion_aviso):
                 aviso.append(create_dic(text, td))
 
@@ -63,7 +62,7 @@ def create_dic(text, td):
             'nro_aviso': get_feature_from_tittle(pattern=Config.reg_ex_head_2, text=td.get_text().replace('\n', '')),
             'id_tipo_aviso': get_tipo_categoria(
                 get_feature_from_tittle(pattern=Config.reg_ex_head_3, text=td.get_text().replace('\n', ''))),
-            'razon_social': get_tipo_sociedad(encontrarTipoSociedad(text)),
+            'razon_social': get_razon_social(td.get_text().replace('\n', '')),
             'id_tipo_sociedad': encontrarTipoSociedad(text),
             'titulo': encontrarIdTitulo(text),
             'fechaConstitucion': encontrarFechaConstitucion(text),

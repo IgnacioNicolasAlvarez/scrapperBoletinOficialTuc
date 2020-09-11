@@ -11,13 +11,21 @@ from db.persistence import *
 def main(dates):
     Config.payload['fechaboletin1'] = dates[1]
     Config.payload['fechaboletin2'] = dates[2]
+
+    print("Empezando recoleccion de URLs")
     urls = RecolectorUrls().get_urls()
+
+    print("Empezando extraccion de datos de Avisos")
     advices = extract_data(urls)
 
-    persistence = Persistence(StrategyDatabase(Config.DB_PROD))
-    for a in advices:
-        persistence.persist(dictionary=a)
-
+    print("Empezando Almacenamiento de datos en BD")
+    try:
+        persistence = Persistence(StrategyDatabase(Config.DB_PROD))
+        for a in advices:
+            persistence.persist(dictionary=a)
+    except:
+        print("Error: Falla en comunicacion con BD.")
+    print("Fin del proceso.")
 
 if __name__ == '__main__':
     if len(sys.argv) == 1:
@@ -27,4 +35,4 @@ if __name__ == '__main__':
     elif len(sys.argv) == 3:
         main(sys.argv)
     else:
-        print('Cantidad Incorrecta de Parametros')
+        print('Cantidad Incorrecta de Parametros. No ingrese ningun parametro para tomar fecha actual o bien ingrese fecha de inicio y final segun el formato dd/mm/yyyy dd/mm/yyyy')

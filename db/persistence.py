@@ -82,7 +82,7 @@ class StrategyDatabase(Strategy):
                 connection.commit()
 
         except Error as e:
-            print(e)
+            print('Error en conexion con BD.')
         finally:
             if connection.is_connected():
                 cursor.close()

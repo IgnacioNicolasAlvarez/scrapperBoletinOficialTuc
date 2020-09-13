@@ -66,7 +66,7 @@ class StrategyDatabase(Strategy):
                         values (
                                 '{1}',
                                 '{get_date_in_format(dictionary['fecha_aviso'])}',
-                                '{dictionary['nro_aviso']}',
+                                '{dictionary['nro_boletin']}',
                                 '{dictionary['id_tipo_aviso']}',
                                 '{dictionary['CUIT']}', 
                                 '{dictionary['razon_social']}', 

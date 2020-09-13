@@ -41,54 +41,6 @@ def encontrarFechaConstitucionSAS(string):
         return None
 
 
-def encontrarCapitalSocial2(string):
-    patronPrecio = re.compile(r'[0-9]+((\,[0-9]+)+)?(\.[0-9]+)?(\.[0-9]+)?(\,[0-9]+)?')
-    patron = re.compile(r'\s+')  # patron para dividir donde encuentre un espacio en blanco
-    palabras = patron.split(string)
-    precios = []
-    preciosReal = []
-    numMayor = 0
-    preciosInt = []
-    for palabra in palabras:
-        bandera = 0
-        encontrado = re.search(patronPrecio, palabra)
-        if encontrado:
-            for char in '.':
-                palabra = palabra.replace(char, '')  # reemplazo los puntos
-
-            for char in palabra:
-                if char == '/' or char == '-' or char == ';' or char == ',' or char == 'º' or char == '°' or char == '%' or char == "do" or char == "2do" \
-                        or char == '“' or char == '”' or char == ')' or char == 'a' or char == '(' or char == 'e' \
-                        or char == ":" or char == 'ª' or char == "ro" or char == "do" or char == "to":
-                    bandera = 1
-
-        if bandera == 0:
-            precios.append(palabra)
-
-    for p in precios:
-        encont = re.search(patronPrecio, p)
-        if encont:
-            preciosReal.append(p)
-
-    for pre in preciosReal:
-        try:
-            preciosInt.append(int(pre))  # block raising an exception
-        except:
-            pass  # doing nothing on exception
-
-    for pre in preciosInt:
-        if pre > numMayor:
-            numMayor = pre
-
-    if preciosReal == None:
-        return None
-
-    if numMayor > 12000:
-        return numMayor
-    else:
-        return None
-
-
 def encontrarCUIT(string):
     patronfecha = r'\b(30|33|34)(\D)?[0-9]{8}(\D)?[0-9]'
     encontrado = re.search(patronfecha, string)
@@ -268,102 +220,40 @@ def get_razon_social(text):
         return None
 
 
-def encontrarCapitalSocialAnterior(string):  # anterior
-    patronPrecio = re.compile(r'[0-9]+((\,[0-9]+)+)?(\.[0-9]+)?(\.[0-9]+)?(\,[0-9]+)?')
-    patron = re.compile(r'\s+')  # patron para dividir donde encuentre un espacio en blanco
-    palabras = patron.split(string)
-    precios = []
-    numMayor = 0
-    preciosInt = []
-    nuevos = []
-    for palabra in palabras:
-        bandera = 0
-        encontrado = re.search(patronPrecio, palabra)
-        if encontrado:
-            for char in palabra:
-                if char == '/' or char == '-' or char == ';' or char == ',' or char == 'º' or char == '°' or char == '%' or char == "do" or char == "2do" \
-                        or char == '“' or char == '”' or char == ')' or char == 'a' or char == '(' or char == 'e' \
-                        or char == ":" or char == 'ª' or char == "ro" or char == "do" or char == "to":
-                    bandera = 1
-
-            if bandera == 0:
-                precios.append(encontrado.group())
-
-    for pre in precios:
-        nueva = pre.replace('.', '')
-        nuevos.append(nueva)
-
-    for pre in nuevos:
-        try:
-            preciosInt.append(int(pre))  # block raising an exception
-        except:
-            pass  # doing nothing on exception
-
-    for pre in preciosInt:
-        if pre > numMayor:
-            numMayor = pre
-
-    if nuevos == None:
-        return 0
-
-    if numMayor > 5000:
-        return numMayor
-    else:
-        return 0
-
-
 def encontrarCapitalSocial(string):
-    patronPrecio = re.compile(r'[0-9]+((\,[0-9]+)+)?(\.[0-9]+)?(\.[0-9]+)?(\,[0-9]+)?')
-    patron = re.compile(r'\s+')
-    palabras = patron.split(string)
+    patronPrecio = re.compile(r'(\$[0-9]*)')
+    palabras = [eliminar_decimales(x) for x in re.compile(r'\s+').split(string)]
+    palabras = [eliminar_espacio_signo_peso(x) for x in palabras]
     precios = []
     numMayor = 0
-    preciosInt = []
-    nuevos = []
-    flag = 0
 
-    for i in range(0, len(palabras)):
-        bandera = 0
-        encontrado = re.search(patronPrecio, palabras[i])
+    for pal in palabras:
+        encontrado = re.search(patronPrecio, pal)
         if encontrado:
-            if palabras[i - 1] == "$":  # el signo peso espaciado
-                for char in palabras[i]:
-                    if char == '/' or char == '-' or char == ';' or char == ',' or char == 'º' or char == '°' or char == '%' or char == "do" or char == "2do" \
-                            or char == '“' or char == '”' or char == ')' or char == 'a' or char == '(' or char == 'e' \
-                            or char == ":" or char == 'ª' or char == "ro" or char == "do" or char == "to":
-                        palabras[i] = palabras[i].replace(char, '')
-                if bandera == 0:
-                    precios.append(encontrado.group())
-
-            palabra = palabras[i]
-            if palabra[0] == "$":
-                for char in palabra:
-                    if char == '/' or char == '-' or char == ';' or char == ',' or char == 'º' or char == '°' or char == '%' or char == "do" or char == "2do" \
-                            or char == '“' or char == '”' or char == ')' or char == 'a' or char == '(' or char == 'e' \
-                            or char == ":" or char == 'ª' or char == "ro" or char == "do" or char == "to" or char == '$':
-                        palabra = palabra.replace(char, '')
-                precios.append(palabra)
+            precios.append((encontrado.group()[1:]))
 
     for pre in precios:
-        aux = re.search(".[0-9]{2}$", pre)
-        if aux:
-            pre = ''.join(list(pre)[:aux.start()])
-        nuevos.append(pre.replace('.', ''))
-
-    for pre in nuevos:
+        precioInt = 0
         try:
-            preciosInt.append(int(pre))  # block raising an exception
+            precioInt = int(pre)
         except:
-            pass  # doing nothing on exception
+            pass
+        numMayor = precioInt if precioInt > numMayor else numMayor
 
-    for pre in preciosInt:
-        if pre > numMayor:
-            numMayor = pre
+    return numMayor if numMayor > 5000 else 0
 
-    if nuevos == None:
-        return 0
 
-    if numMayor > 5000:
-        return numMayor
-    else:
-        return 0
+def eliminar_decimales(numero):
+    aux = re.search(r"\.[0-9]{2}(?![0-9]+)", numero)
+    if aux:
+        numero = ''.join(list(numero)[:aux.start()])
+    return numero.replace('.', '')
+
+
+def eliminar_espacio_signo_peso(texto):
+    aux = re.search(r"(\$\s[0-9]*)", texto)
+    if aux:
+        texto_sin_espacio = list(texto[aux.start(): aux.end()])
+        texto_sin_espacio[1] = ''
+        return ''.join(texto_sin_espacio)
+    return texto

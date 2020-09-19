@@ -7,6 +7,11 @@ def create_random_agent():
 
 
 class Config:
+    BAN_SOCIEDADES = [
+        'JOSE NICOLAS REINHOLD YAZLLE',
+        'CENTRO DE JUBILADOS Y PENSIONADOS CRUZ'
+    ]
+
     URLS = {
         'base_url': 'https://boletin.tucuman.gov.ar/',
         'tabla_url': 'https://boletin.tucuman.gov.ar/tabla'

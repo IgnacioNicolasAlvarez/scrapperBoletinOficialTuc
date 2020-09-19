@@ -1,7 +1,6 @@
 import requests
 from bs4 import BeautifulSoup
 from helpers.expresionesRegularesF import *
-from helpers.for_sociedades import get_tipo_sociedad
 from helpers.for_categorias import get_tipo_categoria
 from helpers.d_wait import wait
 from config import Config
@@ -22,11 +21,10 @@ def _get_aviso_text(bs):
         main_text = bs.find_all("tr", {'bgcolor': '#E4ECED'})
         return main_text[1].find_all('p')[1].get_text()
     except Exception as e:
-        print(main_text)
         return None
 
 
-@wait(1)
+@wait(3)
 def extract_data(links):
     aviso = []
 

@@ -7,7 +7,6 @@ from helpers.for_dates import get_current_format_date
 from db.persistence import *
 
 
-
 def main(dates):
     Config.payload['fechaboletin1'] = dates[1]
     Config.payload['fechaboletin2'] = dates[2]
@@ -20,12 +19,13 @@ def main(dates):
 
     print("Empezando Almacenamiento de datos en BD")
     try:
-        persistence = Persistence(StrategyDatabase(Config.DB_PROD))
+        persistence = Persistence(StrategyDatabase(Config.DB_DOCKER))
         for a in advices:
             persistence.persist(dictionary=a)
-    except:
+    except Exception as e:
         print("Error: Falla en comunicacion con BD.")
     print("Fin del proceso.")
+
 
 if __name__ == '__main__':
     if len(sys.argv) == 1:
@@ -35,4 +35,5 @@ if __name__ == '__main__':
     elif len(sys.argv) == 3:
         main(sys.argv)
     else:
-        print('Cantidad Incorrecta de Parametros. No ingrese ningun parametro para tomar fecha actual o bien ingrese fecha de inicio y final segun el formato dd/mm/yyyy dd/mm/yyyy')
+        print(
+            'Cantidad Incorrecta de Parametros. No ingrese ningun parametro para tomar fecha actual o bien ingrese fecha de inicio y final segun el formato dd/mm/yyyy dd/mm/yyyy')

@@ -1,6 +1,8 @@
 from abc import abstractmethod
 import mysql.connector
 from mysql.connector import Error
+
+from helpers.d_wait import wait
 from helpers.for_dates import get_date_in_format
 
 
@@ -82,7 +84,7 @@ class StrategyDatabase(Strategy):
                 connection.commit()
 
         except Error as e:
-            print('Error en conexion con BD.')
+            print(f'Error en insert con BD: {e} ')
         finally:
             if connection.is_connected():
                 cursor.close()

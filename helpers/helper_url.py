@@ -26,7 +26,7 @@ class RecolectorUrls:
         return links
 
 
-    @wait(1)
+    @wait(2)
     def get_urls_2(self, url_tabla, headers, payload):
         response = requests.get(url_tabla, headers=headers, params=payload)
         bs = BeautifulSoup(response.text, 'html.parser')

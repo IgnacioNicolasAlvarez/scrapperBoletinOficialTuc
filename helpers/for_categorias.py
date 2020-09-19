@@ -1,3 +1,5 @@
+from config import Config
+
 tipo_categoria = [
     {'2': ['SOCIEDADES']},
     {'5': ['AVISOS COMERCIALES']},
@@ -12,3 +14,10 @@ def get_tipo_categoria(text):
                 if v in text:
                     return key
     return 0
+
+
+def isCategoriaRequerida(text):
+    for cat in Config.reg_categorias_solicitadas:
+        if cat in text:
+            return True
+    return False

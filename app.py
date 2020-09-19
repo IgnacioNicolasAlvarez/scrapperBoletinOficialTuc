@@ -1,10 +1,10 @@
 import sys
 
 from config import Config
-from scrapper.scrapper import extract_data
 from helpers.helper_url import RecolectorUrls
 from helpers.for_dates import get_current_format_date
 from db.persistence import *
+from scrapper.scrapper import Scrapper
 
 
 def main(dates):
@@ -15,12 +15,12 @@ def main(dates):
     urls = RecolectorUrls().get_urls()
 
     print("Empezando extraccion de datos de Avisos")
-    advices = extract_data(urls)
+    avisos = Scrapper().extract_data(urls)
 
     print("Empezando Almacenamiento de datos en BD")
     try:
         persistence = Persistence(StrategyDatabase(Config.DB_DOCKER))
-        for a in advices:
+        for a in avisos:
             persistence.persist(dictionary=a)
     except Exception as e:
         print("Error: Falla en comunicacion con BD.")

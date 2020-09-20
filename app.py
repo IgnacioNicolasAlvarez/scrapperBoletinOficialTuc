@@ -12,18 +12,22 @@ def main(dates):
     Config.payload['fechaboletin2'] = dates[2]
 
     print("Empezando recoleccion de URLs")
-    urls = RecolectorUrls().get_urls()
+
+    recolector = RecolectorUrls()
+    urls = recolector.get_urls(Config.headers, Config.payload)
 
     print("Empezando extraccion de datos de Avisos")
-    avisos = Scrapper().extract_data(urls)
+    scrapper = Scrapper()
+    avisos = scrapper.extract_data(urls)
 
     print("Empezando Almacenamiento de datos en BD")
     try:
         persistence = Persistence(StrategyDatabase(Config.DB_DOCKER))
         for a in avisos:
+            print(a)
             persistence.persist(dictionary=a)
     except Exception as e:
-        print("Error: Falla en comunicacion con BD.")
+        print(f"Error: {e}")
     print("Fin del proceso.")
 
 

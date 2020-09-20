@@ -25,3 +25,6 @@ class Aviso:
             self.CUIT = encontrarCUIT(text)
             self.capitalSocial = encontrarCapitalSocial(text[:-30]) if (
                     encontrarCapitalSocial(text) is not None) else 0.00
+
+    def __str__(self):
+        return self.razon_social

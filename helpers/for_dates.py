@@ -10,5 +10,5 @@ def get_date_in_format(date):
     try:
         day = datetime.strptime(date, '%d/%m/%Y')
         return day.date().strftime('%Y-%m-%d')
-    except:
+    except Exception as e:
         return date

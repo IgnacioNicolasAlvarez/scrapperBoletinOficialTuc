@@ -23,3 +23,18 @@ def get_tipo_sociedad(id_sociedad):
             if key == id_sociedad:
                 return value
     return None
+
+
+STRING_SOCIEDADES = [
+    'S.R.L', 'SRL', 'S.R.L.', 'S R L',
+    'S.A.', 'S.A', 'S A', 'S. A.', 'S. A', 'SA',
+    'S.C.', 'S.C', 'SC', 'S C', 'S.C.',
+    'S.H.', 'S.H', 'SH', 'S H',
+    'S.C.', 'S.C', 'SC', 'S C',
+    'U.T.E.', 'U.T.E', 'UTE', 'U T E',
+    'S.C.S.', 'S.C.S', 'SCS', 'S C S',
+    'S.A.S.', 'S. A. S.', 'S .A .S', 'S.A.S', 'SAS', 'SAS', 'S A S',
+    'S.C.A.', 'S.C.A', 'SCA', 'S C A',
+    'S.C.I.', 'S.C.I', 'SCI', 'S C I',
+    'A.C', 'A.C', 'A C', 'A. C.', 'A. C.', 'AC',
+]

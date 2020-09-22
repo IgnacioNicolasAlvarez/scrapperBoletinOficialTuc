@@ -24,10 +24,9 @@ def main(dates):
     try:
         persistence = Persistence(StrategyDatabase(Config.DB_DOCKER))
         for a in avisos:
-            print(a)
             persistence.persist(dictionary=a)
     except Exception as e:
-        print(f"Error: {e}")
+        print(f"Error app: {e}")
     print("Fin del proceso.")
 
 

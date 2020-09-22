@@ -27,19 +27,17 @@ class Scrapper:
             text = self._get_aviso_text(bs)
             for td in tr:
                 descripcion_aviso = helper.get_feature_from_tittle(pattern=Config.reg_ex_head_3,
-                                                            text=td.get_text().replace('\n', ''))
+                                                                   text=td.get_text().replace('\n', ''))
                 if isCategoriaRequerida(descripcion_aviso):
-                    lista_avisos.append(Aviso(text, td))
+                    header_text = td.get_text().replace('\n', '')
+                    if es_razon_social_solicitada(header_text):
+                        lista_avisos.append(Aviso(text, header_text))
 
         return lista_avisos
 
     def _get_aviso_text(self, bs):
-        main_text = None
         try:
             main_text = bs.find_all("tr", {'bgcolor': '#E4ECED'})
             return main_text[1].find_all('p')[1].get_text()
         except Exception as e:
             return None
-
-
-

@@ -155,8 +155,10 @@ def encontrarTipoSociedad(string):
 
 
 def get_razon_social(text):
-    text = text.replace('"', '')
-    return re.findall(r"SOCIEDADES / (.*)", text)[0]
+    for patron in Config.PATRONES_RAZON_SOCIAL:
+        encontrado = re.search(patron, text)
+        if encontrado:
+            return encontrado.group(1)
 
 
 def es_razon_social_solicitada(text):

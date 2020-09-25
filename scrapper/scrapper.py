@@ -11,9 +11,6 @@ from config import Config
 
 class Scrapper:
 
-    def __init__(self):
-        pass
-
     @wait(3)
     def extract_data(self, links):
         lista_avisos = []
@@ -26,18 +23,26 @@ class Scrapper:
 
             text = self._get_aviso_text(bs)
             for td in tr:
+                texto_header = self._limpiar_header(td)
                 descripcion_aviso = helper.get_feature_from_tittle(pattern=Config.reg_ex_head_3,
-                                                                   text=td.get_text().replace('\n', ''))
+                                                                   text=texto_header)
                 if isCategoriaRequerida(descripcion_aviso):
-                    header_text = td.get_text().replace('\n', '')
-                    if es_razon_social_solicitada(header_text):
-                        lista_avisos.append(Aviso(text, header_text))
+                    if es_razon_social_solicitada(texto_header):
+                        print(descripcion_aviso)
+                        lista_avisos.append(Aviso(text, texto_header))
 
         return lista_avisos
+
+    def _limpiar_header(self, td):
+        text = td.get_text()
+        text = text.replace('\n', '')
+        text = text.replace('”', '')
+        return text
 
     def _get_aviso_text(self, bs):
         try:
             main_text = bs.find_all("tr", {'bgcolor': '#E4ECED'})
             return main_text[1].find_all('p')[1].get_text()
         except Exception as e:
+            print(f'Error: Extraer info de aviso - {e}')
             return None

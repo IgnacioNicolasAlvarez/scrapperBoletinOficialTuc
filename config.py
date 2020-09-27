@@ -8,7 +8,7 @@ def create_random_agent():
 
 class Config:
     BAN_SOCIEDADES = [
-        'JOSE NICOLAS REINHOLD YAZLLE',
+        'REINHOLD',
     ]
 
     PATRONES_RAZON_SOCIAL = [
@@ -19,6 +19,11 @@ class Config:
         r'SOCIEDADES\s\/\s(.*)\.$',
         r'SOCIEDADES\s\/\s(.*)',
         r'"(.*)"',
+    ]
+
+    PATRONES_RAZON_SOCIAL_AVISO = [
+        r'\"(.*)\"',
+        r'\“(.*)\”'
     ]
 
     URLS = {

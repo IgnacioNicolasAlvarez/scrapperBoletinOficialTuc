@@ -84,6 +84,7 @@ class StrategyDatabase(Strategy):
                 connection.commit()
 
         except Error as e:
+            print(aviso)
             print(f'Error en insert con BD: {e} ')
         finally:
             if connection.is_connected():

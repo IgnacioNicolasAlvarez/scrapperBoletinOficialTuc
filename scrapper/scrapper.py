@@ -3,7 +3,7 @@ from bs4 import BeautifulSoup
 
 from Model.model import Aviso
 from helpers.expresionesRegularesF import *
-from helpers.for_categorias import get_tipo_categoria, isCategoriaRequerida
+from helpers.for_categorias import isCategoriaRequerida
 from helpers import helper
 from helpers.d_wait import wait
 from config import Config
@@ -27,8 +27,7 @@ class Scrapper:
                 descripcion_aviso = helper.get_feature_from_tittle(pattern=Config.reg_ex_head_3,
                                                                    text=texto_header)
                 if isCategoriaRequerida(descripcion_aviso):
-                    if es_razon_social_solicitada(texto_header):
-                        print(descripcion_aviso)
+                    if self._es_aviso_baneado(text) or self._es_aviso_baneado(texto_header):
                         lista_avisos.append(Aviso(text, texto_header))
 
         return lista_avisos
@@ -38,6 +37,12 @@ class Scrapper:
         text = text.replace('\n', '')
         text = text.replace('”', '')
         return text
+
+    def _es_aviso_baneado(self, text):
+        for ban in Config.BAN_SOCIEDADES:
+            if ban in text:
+                return False
+        return True
 
     def _get_aviso_text(self, bs):
         try:

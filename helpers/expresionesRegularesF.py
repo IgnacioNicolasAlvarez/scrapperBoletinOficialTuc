@@ -1,7 +1,6 @@
 import re
 import datetime
 from config import Config
-from helpers.for_sociedades import STRING_SOCIEDADES
 
 
 def encontrarIdBoletin(text):
@@ -161,12 +160,16 @@ def get_razon_social(text):
             return encontrado.group(1)
 
 
-def es_razon_social_solicitada(text):
-    list_palabras = text.split()
-    for sociedad in STRING_SOCIEDADES:
-        if sociedad in list_palabras:
-            return True
-    return False
+def get_razon_social_aviso(text, header):
+    for patron in Config.PATRONES_RAZON_SOCIAL_AVISO:
+        encontrado = re.search(patron, text[30:])
+        if encontrado:
+            x = re.search(r'\(\s*(.*)\)', encontrado.group(1))
+            if x:
+                if len(encontrado.group(1)) > 51:
+                    return get_razon_social(header)
+                return f'{encontrado.group(1)[:x.span()[0]]} - CONST'
+    return get_razon_social(header)
 
 
 def encontrarCapitalSocial(string):

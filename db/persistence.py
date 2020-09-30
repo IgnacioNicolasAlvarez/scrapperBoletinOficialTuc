@@ -1,6 +1,8 @@
 from abc import abstractmethod
 import mysql.connector
 from mysql.connector import Error
+
+from helpers.d_wait import wait
 from helpers.for_dates import get_date_in_format
 
 
@@ -48,7 +50,7 @@ class StrategyDatabase(Strategy):
         self.password = db_config['DB_PASS']
         self.port = db_config['DB_PORT']
 
-    def persist(self, dictionary):
+    def persist(self, aviso):
         connection = mysql.connector.connect()
         cursor = None
         try:
@@ -65,16 +67,16 @@ class StrategyDatabase(Strategy):
                         fecha_constitucion_soc, id_titulo, id_tpublicacion_soc, capita_social, texto, fecha) 
                         values (
                                 '{1}',
-                                '{get_date_in_format(dictionary['fecha_aviso'])}',
-                                '{dictionary['nro_boletin']}',
-                                '{dictionary['id_tipo_aviso']}',
-                                '{dictionary['CUIT']}', 
-                                '{dictionary['razon_social']}', 
-                                '{dictionary['fechaConstitucion']}',
-                                '{dictionary['id_titulo']}',
-                                '{dictionary['id_tipo_sociedad']}',
-                                '{dictionary['capitalSocial']}',
-                                '{dictionary['texto']}',
+                                '{aviso.fecha_aviso}',
+                                '{aviso.nro_boletin}',
+                                '{aviso.id_tipo_aviso}',
+                                '{aviso.CUIT}', 
+                                '{aviso.razon_social}', 
+                                '{aviso.fechaConstitucion}',
+                                '{aviso.id_titulo}',
+                                '{aviso.id_tipo_sociedad}',
+                                '{aviso.capitalSocial}',
+                                '{aviso.texto}',
                                 sysdate()
                                 );
                     """
@@ -82,7 +84,8 @@ class StrategyDatabase(Strategy):
                 connection.commit()
 
         except Error as e:
-            print('Error en conexion con BD.')
+            print(aviso)
+            print(f'Error en insert con BD: {e} ')
         finally:
             if connection.is_connected():
                 cursor.close()

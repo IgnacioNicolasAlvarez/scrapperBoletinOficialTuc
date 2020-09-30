@@ -7,9 +7,33 @@ def create_random_agent():
 
 
 class Config:
+    BAN_SOCIEDADES = [
+        'REINHOLD',
+    ]
+
+    PATRONES_RAZON_SOCIAL = [
+        r'SOCIEDADES\s.*\"(.*)\"',
+        r'SOCIEDADES\s\/\s.*\"(.*)\" \(CONSTITUCIÓN\)"*',
+        r'"(.*) \(CONSTITUCIÓN\)\"*',
+        r'SOCIEDADES\s\/\s(.*)\(CONSTITUCIÓN\)',
+        r'SOCIEDADES\s\/\s.*\"(.*)\" \(CONSTITUCIN\)"*',
+        r'"(.*) \(CONSTITUCIN\)\"*',
+        r'SOCIEDADES\s\/\s(.*)\(CONSTITUCIN\)',
+        r'SOCIEDADES\s\/\s"(.*)\"',
+        r'SOCIEDADES\s\/\s(.*)\.$',
+        r'SOCIEDADES\s\/\s(.*)',
+        r'"(.*)"',
+    ]
+
+    PATRONES_RAZON_SOCIAL_AVISO = [
+        r'\"(.*)\"',
+        r'\“(.*)\”'
+    ]
+
     URLS = {
         'base_url': 'https://boletin.tucuman.gov.ar/',
         'tabla_url': 'https://boletin.tucuman.gov.ar/tabla'
+
     }
 
     headers = {

@@ -6,6 +6,9 @@ def get_current_format_date():
     return today.strftime("%d/%m/%Y")
 
 
-def get_date_in_format(date_time_str):
-    day = datetime.strptime(date_time_str, '%d/%m/%Y')
-    return day.date().strftime('%Y-%m-%d')
+def get_date_in_format(date):
+    try:
+        day = datetime.strptime(date, '%d/%m/%Y')
+        return day.date().strftime('%Y-%m-%d')
+    except Exception as e:
+        return date

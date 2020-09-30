@@ -1,223 +1,175 @@
 import re
 import datetime
-
-patronfecha = r'([0][1-9]|[12][0-9]|3[01])(\/|-)([0][1-9]|[1][0-2]|[1-9])\2(\d{4})'
-patronCUIT = r'\b(30|33|34)(\D)?[0-9]{8}(\D)?[0-9]'  # empresas
+from config import Config
 
 
-def encontrarIdBoletin(string):
+def encontrarIdBoletin(text):
     patronIdBoletin = r'(A[0-9]{6})'
-    encontrado = re.search(patronIdBoletin, string)
+    encontrado = re.search(patronIdBoletin, text)
     if encontrado:
         return encontrado.group()
-    else:
-        print("No se ha encontrado IdBoletin")
-        return None
+    return None
 
 
-def encontrarFecha(string):
+def encontrarFecha(text):
     patronfecha = r'([0][1-9]|[12][0-9]|3[01])(\/|-)([0][1-9]|[1][0-2])\2(\d{4})'
-    encontrado = re.search(patronfecha, string)
+    encontrado = re.search(patronfecha, text)
     if encontrado:
-        fechaDate = datetime.datetime.strptime(encontrado.group(), '%d/%m/%Y')
-        return fechaDate.date()
-    else:
-        print("No se ha encontrado ninguna fecha")
-        return None
+        fecha = datetime.datetime.strptime(encontrado.group(), '%d/%m/%Y')
+        return fecha.date()
+    return None
 
 
-def encontrarFechaConstitucionSAS(string):
+def encontrarFechaConstitucionSAS(texto):
     patronfecha = r'([0][1-9]|[12][0-9]|3[01])(\/|-)([0][1-9]|[1][0-2])\2(\d{4})'
-    patron = re.compile(r'\s+')  # patron para dividir donde encuentre un espacio en blanco
-    palabras = patron.split(string)
+    patron = re.compile(r'\s+')
+    palabras = patron.split(texto)
     textoAnalizar = palabras[1]
 
     encontrado = re.search(patronfecha, textoAnalizar)
     if encontrado:
-        fechaDate = datetime.datetime.strptime(encontrado.group(), '%d/%m/%Y')
-        return fechaDate.date()
-    else:
-        print("No se ha encontrado ninguna fecha")
-        return None
+        fecha = datetime.datetime.strptime(encontrado.group(), '%d/%m/%Y')
+        return fecha.date()
+    print("No se ha encontrado ninguna fecha")
+    return None
 
 
-def encontrarCUIT(string):
+def encontrarCUIT(texto):
     patronfecha = r'\b(30|33|34)(\D)?[0-9]{8}(\D)?[0-9]'
-    encontrado = re.search(patronfecha, string)
+    encontrado = re.search(patronfecha, texto)
     if encontrado:
         return encontrado.group()
-    else:
-        return ""
+    return ''
 
 
-def encontrarFechaConstitucion(string):
-    patronfecha = r'([0][1-9]|[12][0-9]|3[01])(\/|-)([0][1-9]|[1][0-2]|[1-9])\2(\d{4})'  # el mes puede tener un solo número
+def reemplazar_caracteres_especiales(text):
+    return text.replace('.', '').replace(',', '').replace(';', '').replace('-', '')
+
+
+def encontrarFechaConstitucion(texto):
+    patronfecha = r'([0][1-9]|[12][0-9]|3[01])(\/|-)([0][1-9]|[1][0-2]|[1-9])\2(\d{4})'
     patronSeparar = re.compile(r'\s+')
-    palabras = patronSeparar.split(string)
+    palabras = patronSeparar.split(texto)
     fechas = []
-    fechasDate = []
-    fechaMayor = '01/01/2017'
-    fechaMayorDate = datetime.datetime.strptime(fechaMayor, '%d/%m/%Y')
+    fecha_referencia = datetime.datetime.strptime('01/01/2017', '%d/%m/%Y')
 
     for palabra in palabras:
-        encontrado = re.search(patronfecha, palabra)
-        if encontrado:
-            for char in '.':
-                palabra = palabra.replace(char, '')
-            for char in ',':
-                palabra = palabra.replace(char, '')
-            for char in ';':
-                palabra = palabra.replace(char, '')
-            for char in '-':
-                palabra = palabra.replace(char, '')
-            fechas.append(palabra)
+        if re.search(patronfecha, palabra):
+            palabra = reemplazar_caracteres_especiales(palabra)
+        fechas.append(palabra)
 
-    for fecha in fechas:  # transforma las fechas en date, compara y setea la mayor
+    for fecha in fechas:
         try:
-            fecha1 = datetime.datetime.strptime(fecha, '%d/%m/%Y')
-            if fecha1 > fechaMayorDate:
-                # return fecha1.strftime("%d/%m/%Y")
-                return fecha1.date().strftime('%Y-%m-%d')
+            fecha_aux = datetime.datetime.strptime(fecha, '%d/%m/%Y')
         except:
-            pass
+            continue
+        if fecha_aux > fecha_referencia:
+            fecha_referencia = fecha_aux
+
+    return fecha_referencia.date().strftime('%Y-%m-%d')
 
 
 def encontrarIdTitulo(string):
     string = string.lower()
     patron5 = re.compile(
         r'\brenuncia|renunció|designa|designó|directorio|director|suplente|directora|cargo|cargos|renuncia|gerente|directores|suplentes\b')  # Designación, modificación autoridades, directorio, gerencia
-    patron35 = re.compile(r'\bsede social|domicilio\b')  # modificación domicilio
-    patron27 = re.compile(r'\bcapital social\b')  # modificación capital social
+    patron35 = re.compile(r'\bsede social|domicilio\b')
+    patron27 = re.compile(r'\bcapital social\b')
     patron58 = re.compile(
-        r'\brectifica|ratifica|complementa|aclara\b')  # acta complementaria, rectificación, ratificación
-    patron83 = re.compile(r'\bbalance|estados contables\b')  # balance
-    patron10 = re.compile(r'\bescisi|escisión|fusi|fusión\b')  # escisión / fusión
-    patron6 = re.compile(r'\basamblea\b')  # asamblea
-    modificacion = "113"
-    # si no encaja con ninguna, modificación -> 113
+        r'\brectifica|ratifica|complementa|aclara\b')
+    patron83 = re.compile(r'\bbalance|estados contables\b')
+    patron10 = re.compile(r'\bescisi|escisión|fusi|fusión\b')
+    patron6 = re.compile(r'\basamblea\b')
 
-    encontrado = re.search(patron5, string)
-    if encontrado:
+    if re.search(patron5, string):
         return "5"
-    else:
-        encontrado = re.search(patron35, string)
-        if encontrado:
-            return "35"
-        else:
-            encontrado = re.search(patron27, string)
-            if encontrado:
-                return "27"
-            else:
-                encontrado = re.search(patron58, string)
-                if encontrado:
-                    return "58"
-                else:
-                    encontrado = re.search(patron83, string)
-                    if encontrado:
-                        return "83"
-                    else:
-                        encontrado = re.search(patron10, string)
-                        if encontrado:
-                            return "10"
-                        else:
-                            encontrado = re.search(patron6, string)
-                            if encontrado:
-                                return "6"
-                            else:
-                                return modificacion
+    elif re.search(patron35, string):
+        return "35"
+    elif re.search(patron27, string):
+        return "27"
+    elif re.search(patron58, string):
+        return "58"
+    elif re.search(patron83, string):
+        return "83"
+    elif re.search(patron10, string):
+        return "10"
+    elif re.search(patron6, string):
+        return "6"
+    return "113"
 
 
 def encontrarTipoSociedad(string):
-    patron1 = re.compile(r'\bS.R.L.|SOCIEDAD DE RESPONSABILIDAD LIMITADA|S.R.L\b')
-    patron2 = re.compile(r'\bS.A.|SOCIEDAD ANONIMA|SOCIEDAD ANÓNIMA|S.A\b')
-    patron3 = re.compile(r'\bS.C.|SOCIEDAD CIVIL|S.C\b')
-    patron5 = re.compile(r'\bASOCIACION MUTUAL|ASOCIACIÓN MUTUAL\b')
-    patron9 = re.compile(r'\bS.H.|SOCIEDAD COLECTIVA|S.H\b')
-    patron12 = re.compile(r'\bS.C.|S.C\b')
-    patron14 = re.compile(r'\bU.T.E.|U.T.E\b')
-    patron29 = re.compile(r'\bS.C.S.|SOCIEDAD EN COMANDITA SIMPLE|S.C.S\b')
-    patron30 = re.compile(r'\bS.A.S.|SOCIEDAD ANÓNIMA SIMPLIFICADA|SOCIEDAD ANONIMA SIMPLIFICADA|S.A.S\b')
-    patron38 = re.compile(r'\bS.C.A.|SOCIEDAD EN COMANDITA POR ACCIONES|S.C.A\b')
-    patron41 = re.compile(r'\bS.C.I.|SOCIEDAD DE CAPITAL E INDUSTRIA|S.C.I\b')
-    patron42 = re.compile(r'\bCOOPERATIVA\b')
-    patron43 = re.compile(r'\bFIDEICOMISO\b')
-    # patron44 = re.compile(r'\bOTRO\b')
-    patron45 = re.compile(r'\bA.C.|ASOCIACION CIVIL|ASOCIACIÓN CIVIL|A.C\b')
-    patron46 = re.compile(r'\bAGRUPACION DE COLABORACION EMPRESARIA|AGRUPACIÓN DE COLABORACIÓN EMPRESARIA\b')
-    patron47 = re.compile(r'\bSOCIEDAD POR ACCIONES SIMPLIFICADA\b')
+    string = string.strip()
+    patron1 = re.compile(r'S.R.L|SOCIEDAD DE RESPONSABILIDAD LIMITADA|SRL|S.R.L.|S R L$')
+    patron2 = re.compile(r'S.A.|S.A|S A|S. A.|S. A|SA')
+    patron3 = re.compile(r'S\.C\.$|SOCIEDAD CIVIL|S\.C$|SC$|S C$|S.C.')
+    patron5 = re.compile(r'ASOCIACION MUTUAL|ASOCIACIÓN MUTUAL')
+    patron9 = re.compile(r'S.H.$|SOCIEDAD COLECTIVA|S.H$|SH$|S H$')
+    patron12 = re.compile(r'S.C.$|S.C$|SC$|S C$')
+    patron14 = re.compile(r'U\.T\.E\.$|U\.T\.E$|UTE$|U T E$')
+    patron29 = re.compile(r'S\.C\.S\.$|SOCIEDAD EN COMANDITA SIMPLE|S\.C\.S$|SCS$|S C S$')
+    patron30 = re.compile(
+        r'S.A.S.|S. A. S.|S .A .S|SOCIEDAD ANÓNIMA SIMPLIFICADA|SOCIEDAD ANONIMA SIMPLIFICADA|S\.A\.S$|SAS$|S A S$|SAS - Sociedad Anónima Simplificada')
+    patron38 = re.compile(r'S\.C\.A\.$|SOCIEDAD EN COMANDITA POR ACCIONES|S\.C\.A$|SCA$|S C A$')
+    patron41 = re.compile(r'S\.C\.I\.$|SOCIEDAD DE CAPITAL E INDUSTRIA|S\.C\.I$|SCI$|S C I$')
+    patron42 = re.compile(r'COOPERATIVA')
+    patron43 = re.compile(r'FIDEICOMISO')
+    patron45 = re.compile(r'A\.C\.$|ASOCIACION CIVIL|ASOCIACIÓN|ASOCIACION|ASOCIACIÓN CIVIL|A\.C$|AC$|A C$')
+    patron46 = re.compile(r'AGRUPACION DE COLABORACION EMPRESARIA|AGRUPACIÓN DE COLABORACIÓN EMPRESARIA')
+    patron47 = re.compile(r'SOCIEDAD POR ACCIONES SIMPLIFICADA')
 
-    encontrado = re.search(patron1, string)
-    if encontrado:
-        return "1"
-
-    encontrado = re.search(patron2, string)
-    if encontrado:
-        return "2"
-
-    encontrado = re.search(patron3, string)
-    if encontrado:
-        return "3"
-
-    encontrado = re.search(patron5, string)
-    if encontrado:
-        return "5"
-
-    encontrado = re.search(patron9, string)
-    if encontrado:
-        return "9"
-
-    encontrado = re.search(patron12, string)
-    if encontrado:
-        return "12"
-
-    encontrado = re.search(patron14, string)
-    if encontrado:
-        return "14"
-
-    encontrado = re.search(patron29, string)
-    if encontrado:
-        return "29"
-
-    encontrado = re.search(patron30, string)
-    if encontrado:
+    if re.search(patron30, string):
         return "30"
-
-    encontrado = re.search(patron38, string)
-    if encontrado:
+    elif re.search(patron1, string):
+        return "1"
+    elif re.search(patron2, string):
+        return "2"
+    elif re.search(patron3, string):
+        return "3"
+    elif re.search(patron5, string):
+        return "5"
+    elif re.search(patron9, string):
+        return "9"
+    elif re.search(patron12, string):
+        return "12"
+    elif re.search(patron14, string):
+        return "14"
+    elif re.search(patron29, string):
+        return "29"
+    elif re.search(patron38, string):
         return "38"
-
-    encontrado = re.search(patron41, string)
-    if encontrado:
+    elif re.search(patron41, string):
         return "41"
-
-    encontrado = re.search(patron42, string)
-    if encontrado:
+    elif re.search(patron42, string):
         return "42"
-
-    encontrado = re.search(patron43, string)
-    if encontrado:
+    elif re.search(patron43, string):
         return "43"
-
-    encontrado = re.search(patron45, string)
-    if encontrado:
+    elif re.search(patron45, string):
         return "45"
-
-    encontrado = re.search(patron46, string)
-    if encontrado:
+    elif re.search(patron46, string):
         return "46"
-
-    encontrado = re.search(patron47, string)
-    if encontrado:
+    elif re.search(patron47, string):
         return "47"
-    else:
-        return "44"  # OTRO
+    return "44"
 
 
 def get_razon_social(text):
-    try:
-        return re.findall(r"SOCIEDADES / (.*)", text)[0]
-    except Exception as e:
-        return None
+    for patron in Config.PATRONES_RAZON_SOCIAL:
+        encontrado = re.search(patron, text)
+        if encontrado:
+            return encontrado.group(1)
+
+
+def get_razon_social_aviso(text, header):
+    for patron in Config.PATRONES_RAZON_SOCIAL_AVISO:
+        encontrado = re.search(patron, text[30:])
+        if encontrado:
+            x = re.search(r'\(\s*(.*)\)', encontrado.group(1))
+            if x:
+                if len(encontrado.group(1)) > 51:
+                    return get_razon_social(header)
+                return f'{encontrado.group(1)[:x.span()[0]]} - CONST'
+    return get_razon_social(header)
 
 
 def encontrarCapitalSocial(string):

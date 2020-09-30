@@ -1,11 +1,10 @@
 import sys
 
 from config import Config
-from scrapper.scrapper import extract_data
 from helpers.helper_url import RecolectorUrls
 from helpers.for_dates import get_current_format_date
 from db.persistence import *
-
+from scrapper.scrapper import Scrapper
 
 
 def main(dates):
@@ -13,19 +12,23 @@ def main(dates):
     Config.payload['fechaboletin2'] = dates[2]
 
     print("Empezando recoleccion de URLs")
-    urls = RecolectorUrls().get_urls()
+
+    recolector = RecolectorUrls()
+    urls = recolector.get_urls(Config.headers, Config.payload)
 
     print("Empezando extraccion de datos de Avisos")
-    advices = extract_data(urls)
+    scrapper = Scrapper()
+    avisos = scrapper.extract_data(urls)
 
     print("Empezando Almacenamiento de datos en BD")
     try:
-        persistence = Persistence(StrategyDatabase(Config.DB_PROD))
-        for a in advices:
+        persistence = Persistence(StrategyDatabase(Config.DB_DOCKER))
+        for a in avisos:
             persistence.persist(dictionary=a)
-    except:
-        print("Error: Falla en comunicacion con BD.")
+    except Exception as e:
+        print(f"Error app: {e}")
     print("Fin del proceso.")
+
 
 if __name__ == '__main__':
     if len(sys.argv) == 1:
@@ -35,4 +38,5 @@ if __name__ == '__main__':
     elif len(sys.argv) == 3:
         main(sys.argv)
     else:
-        print('Cantidad Incorrecta de Parametros. No ingrese ningun parametro para tomar fecha actual o bien ingrese fecha de inicio y final segun el formato dd/mm/yyyy dd/mm/yyyy')
+        print(
+            'Cantidad Incorrecta de Parametros. No ingrese ningun parametro para tomar fecha actual o bien ingrese fecha de inicio y final segun el formato dd/mm/yyyy dd/mm/yyyy')

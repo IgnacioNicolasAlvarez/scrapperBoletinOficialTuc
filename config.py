@@ -12,9 +12,13 @@ class Config:
     ]
 
     PATRONES_RAZON_SOCIAL = [
+        r'SOCIEDADES\s.*\"(.*)\"',
         r'SOCIEDADES\s\/\s.*\"(.*)\" \(CONSTITUCIÓN\)"*',
         r'"(.*) \(CONSTITUCIÓN\)\"*',
         r'SOCIEDADES\s\/\s(.*)\(CONSTITUCIÓN\)',
+        r'SOCIEDADES\s\/\s.*\"(.*)\" \(CONSTITUCIN\)"*',
+        r'"(.*) \(CONSTITUCIN\)\"*',
+        r'SOCIEDADES\s\/\s(.*)\(CONSTITUCIN\)',
         r'SOCIEDADES\s\/\s"(.*)\"',
         r'SOCIEDADES\s\/\s(.*)\.$',
         r'SOCIEDADES\s\/\s(.*)',

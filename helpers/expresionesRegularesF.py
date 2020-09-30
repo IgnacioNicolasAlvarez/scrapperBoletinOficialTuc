@@ -109,7 +109,7 @@ def encontrarTipoSociedad(string):
     patron14 = re.compile(r'U\.T\.E\.$|U\.T\.E$|UTE$|U T E$')
     patron29 = re.compile(r'S\.C\.S\.$|SOCIEDAD EN COMANDITA SIMPLE|S\.C\.S$|SCS$|S C S$')
     patron30 = re.compile(
-        r'S.A.S.|S. A. S.|S .A .S|SOCIEDAD ANÓNIMA SIMPLIFICADA|SOCIEDAD ANONIMA SIMPLIFICADA|S\.A\.S$|SAS$|SAS.|S A S$|SAS - Sociedad Anónima Simplificada')
+        r'S.A.S.|S. A. S.|S .A .S|SOCIEDAD ANÓNIMA SIMPLIFICADA|SOCIEDAD ANONIMA SIMPLIFICADA|S\.A\.S$|SAS$|S A S$|SAS - Sociedad Anónima Simplificada')
     patron38 = re.compile(r'S\.C\.A\.$|SOCIEDAD EN COMANDITA POR ACCIONES|S\.C\.A$|SCA$|S C A$')
     patron41 = re.compile(r'S\.C\.I\.$|SOCIEDAD DE CAPITAL E INDUSTRIA|S\.C\.I$|SCI$|S C I$')
     patron42 = re.compile(r'COOPERATIVA')

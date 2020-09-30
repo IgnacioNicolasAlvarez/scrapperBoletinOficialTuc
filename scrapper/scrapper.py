@@ -16,6 +16,7 @@ class Scrapper:
         lista_avisos = []
 
         for link in links:
+
             link = Config.URLS['base_url'] + link
             response = requests.get(link, headers=Config.headers)
             bs = BeautifulSoup(response.text, 'html.parser')

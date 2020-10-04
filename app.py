@@ -22,9 +22,12 @@ def main(dates):
 
     print("Empezando Almacenamiento de datos en BD")
     try:
-        persistence = Persistence(StrategyDatabase(Config.DB_DOCKER))
+        persistence = Persistence([
+            StrategyMongo(Config.DB_MONGO),
+            #StrategyDatabase(Config.DB_PROD)
+        ])
         for a in avisos:
-            persistence.persist(dictionary=a)
+            persistence.persist(a)
     except Exception as e:
         print(f"Error app: {e}")
     print("Fin del proceso.")

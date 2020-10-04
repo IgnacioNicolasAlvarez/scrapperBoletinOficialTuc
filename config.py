@@ -83,3 +83,5 @@ class Config:
         'DB_PASS': str(dotenv.get('DB_PASS_PROD')),
         'DB_PORT': dotenv.get('DB_PORT_DOCKER', default='3306')
     }
+
+    DB_MONGO = dotenv.get('DB_MONGO')

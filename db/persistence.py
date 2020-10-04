@@ -1,44 +1,44 @@
 from abc import abstractmethod
+
 import mysql.connector
 from mysql.connector import Error
-
-from helpers.d_wait import wait
-from helpers.for_dates import get_date_in_format
+from pymongo import MongoClient
 
 
 class Persistence:
 
-    def __init__(self, strategy):
-        self._strategy = strategy
+    def __init__(self, strategies):
+        self._strategies = strategies
 
-    def persist(self, dictionary):
-        self._strategy.persist(dictionary)
+    def persist(self, aviso):
+        for strategy in self._strategies:
+            strategy.persist(aviso)
 
 
 class Strategy:
     @abstractmethod
-    def persist(self, dictionary):
+    def persist(self, aviso):
         pass
 
 
 class StrategyPrintInScreen(Strategy):
-    def persist(self, dictionary):
-        for key, value in dictionary.items():
+    def persist(self, aviso):
+        for key, value in aviso.items():
             print(f'{key}: {value}')
 
 
-class StrategyFile(Strategy):
-    def __init__(self, filename):
-        self.filename = filename
+class StrategyMongo(Strategy):
+    def __init__(self, uri):
+        self.conection_str = uri
 
-    def persist(self, dictionary):
-        file = open(self.filename, 'a+')
-        file.write('\r\n')
-        for key, value in dictionary.items():
-            file.write(f'{key}: {value.encode("utf8")} \r')
-
-        file.write('--------------------------------------------------------\r\n')
-        file.close()
+    def persist(self, aviso):
+        client = MongoClient(self.conection_str)
+        db = client.Boletin
+        try:
+            db.aviso.insert_one(aviso.__dict__)
+        except Exception as e:
+            print(e)
+            pass
 
 
 class StrategyDatabase(Strategy):

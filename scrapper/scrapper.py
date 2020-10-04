@@ -1,7 +1,7 @@
 import requests
 from bs4 import BeautifulSoup
 
-from Model.model import Aviso
+from model.model import Aviso
 from helpers.expresionesRegularesF import *
 from helpers.for_categorias import isCategoriaRequerida
 from helpers import helper

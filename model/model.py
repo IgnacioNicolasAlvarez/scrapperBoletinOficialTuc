@@ -3,7 +3,7 @@ from helpers.expresionesRegularesF import encontrarTipoSociedad, get_razon_socia
     encontrarFechaConstitucion, encontrarCUIT, encontrarCapitalSocial, get_razon_social_aviso
 from helpers.for_categorias import get_tipo_categoria
 from helpers.for_dates import get_date_in_format
-from helpers.helper import get_feature_from_tittle
+from helpers.helper import get_feature_from_tittle, encontrar_nombres
 
 
 class Aviso:
@@ -29,6 +29,8 @@ class Aviso:
         self.CUIT = encontrarCUIT(text)
         self.capitalSocial = encontrarCapitalSocial(text[:-30]) if (
                 encontrarCapitalSocial(text) is not None) else 0.00
+
+        self.nombres = encontrar_nombres(text)
 
     def __str__(self):
         return self.razon_social

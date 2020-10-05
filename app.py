@@ -23,7 +23,8 @@ def main(dates):
     print("Empezando Almacenamiento de datos en BD")
     try:
         persistence = Persistence([
-            StrategyMongo(Config.DB_MONGO),
+            StrategyPrintInScreen(),
+            #StrategyMongo(Config.DB_MONGO),
             #StrategyDatabase(Config.DB_PROD)
         ])
         for a in avisos:

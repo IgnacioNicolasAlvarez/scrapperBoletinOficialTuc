@@ -59,7 +59,7 @@ class Config:
 
     reg_categorias_solicitadas = ['SOCIEDADES', 'ASAMBLEAS', 'AVISOS']
 
-    dotenv.load('./dev.env')
+    dotenv.load('./.env')
     DB_AZURE = {
         'DB_HOST': dotenv.get('DB_HOST_AZURE'),
         'DB_NAME': dotenv.get('DB_NAME_AZURE', default=''),

@@ -3,7 +3,7 @@ import sys
 from config import Config
 from helpers.helper_url import RecolectorUrls
 from helpers.for_dates import get_current_format_date
-from db.persistence import *
+from db.persistence import Persistence, StrategyMongo, StrategyPrintInScreen
 from scrapper.scrapper import Scrapper
 
 
@@ -23,7 +23,8 @@ def main(dates):
     print("Empezando Almacenamiento de datos en BD")
     try:
         persistence = Persistence([
-            StrategyMongo(Config.DB_MONGO),
+            StrategyPrintInScreen(),
+            #StrategyMongo(Config.DB_MONGO),
             #StrategyDatabase(Config.DB_PROD)
         ])
         for a in avisos:
@@ -42,4 +43,5 @@ if __name__ == '__main__':
         main(sys.argv)
     else:
         print(
-            'Cantidad Incorrecta de Parametros. No ingrese ningun parametro para tomar fecha actual o bien ingrese fecha de inicio y final segun el formato dd/mm/yyyy dd/mm/yyyy')
+            'Cantidad Incorrecta de Parametros. No ingrese ningun parametro para tomar fecha actual o bien ingrese '
+            'fecha de inicio y final segun el formato dd/mm/yyyy dd/mm/yyyy')

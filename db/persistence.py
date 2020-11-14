@@ -23,8 +23,7 @@ class Strategy:
 
 class StrategyPrintInScreen(Strategy):
     def persist(self, aviso):
-        for key, value in aviso.items():
-            print(f'{key}: {value}')
+        print(aviso.__dict__)
 
 
 class StrategyMongo(Strategy):

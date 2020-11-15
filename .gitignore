@@ -468,7 +468,7 @@ celerybeat.pid
 test_*.py
 # Environments
 #.env
-
+/venv
 # Spyder project settings
 .spyderproject
 .spyproject

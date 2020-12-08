@@ -31,7 +31,7 @@ def main(dates):
             # StrategyDatabase(Config.DB_PROD)
         ])
         for a in tqdm(avisos):
-            sleep(0.25)
+            sleep(0.10)
             persistence.persist(a)
     except Exception as e:
         print(f"Error app: {e}")

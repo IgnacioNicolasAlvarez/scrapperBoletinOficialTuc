@@ -1,9 +1,9 @@
 from config import Config
 
 tipo_categoria = [
-    {'2': ['SOCIEDADES']},
-    {'5': ['AVISOS COMERCIALES']},
-    {'7': ['ASAMBLEAS']}
+    {"2": ["SOCIEDADES"]},
+    {"5": ["AVISOS COMERCIALES"]},
+    {"7": ["ASAMBLEAS"]},
 ]
 
 

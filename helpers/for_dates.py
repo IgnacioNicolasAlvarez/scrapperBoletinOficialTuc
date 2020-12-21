@@ -8,7 +8,7 @@ def get_current_format_date():
 
 def get_date_in_format(date):
     try:
-        day = datetime.strptime(date, '%d/%m/%Y')
-        return day.date().strftime('%Y-%m-%d')
+        day = datetime.strptime(date, "%d/%m/%Y")
+        return day.date().strftime("%Y-%m-%d")
     except Exception as e:
         return date

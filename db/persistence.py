@@ -1,16 +1,19 @@
 from abc import abstractmethod
+from time import sleep
 
 import mysql.connector
 from mysql.connector import Error
 from pymongo import MongoClient
 
+from logger import guardar_log
+
 
 class Persistence:
-
     def __init__(self, strategies):
         self._strategies = strategies
 
     def persist(self, aviso):
+        sleep(0.10)
         for strategy in self._strategies:
             strategy.persist(aviso)
 
@@ -36,28 +39,31 @@ class StrategyMongo(Strategy):
         try:
             db.aviso.insert_one(aviso.__dict__)
         except Exception as e:
-            print(e)
+            guardar_log(
+                "error", f"Conexion insert en MongoDB - Aviso: {aviso.nro_aviso}"
+            )
             pass
 
 
 class StrategyDatabase(Strategy):
-
     def __init__(self, db_config):
-        self.host = db_config['DB_HOST']
-        self.name = db_config['DB_NAME']
-        self.user = db_config['DB_USER']
-        self.password = db_config['DB_PASS']
-        self.port = db_config['DB_PORT']
+        self.host = db_config["DB_HOST"]
+        self.name = db_config["DB_NAME"]
+        self.user = db_config["DB_USER"]
+        self.password = db_config["DB_PASS"]
+        self.port = db_config["DB_PORT"]
 
     def persist(self, aviso):
         connection = mysql.connector.connect()
         cursor = None
         try:
-            connection = mysql.connector.connect(host=self.host,
-                                                 database=self.name,
-                                                 user=self.user,
-                                                 password=self.password,
-                                                 port=self.port)
+            connection = mysql.connector.connect(
+                host=self.host,
+                database=self.name,
+                user=self.user,
+                password=self.password,
+                port=self.port,
+            )
             if connection.is_connected():
                 cursor = connection.cursor()
                 query = f"""
@@ -83,9 +89,8 @@ class StrategyDatabase(Strategy):
                 connection.commit()
 
         except Error as e:
-            print(aviso)
-            print(f'Error en insert con BD: {e} ')
-            
+            guardar_log("error", f"Conexion insert en SQL - Aviso: {aviso.nro_aviso}")
+
         finally:
             if connection.is_connected():
                 cursor.close()

@@ -4,7 +4,7 @@ from config import Config
 
 
 def encontrarIdBoletin(text):
-    patronIdBoletin = r'(A[0-9]{6})'
+    patronIdBoletin = r"(A[0-9]{6})"
     encontrado = re.search(patronIdBoletin, text)
     if encontrado:
         return encontrado.group()
@@ -12,46 +12,46 @@ def encontrarIdBoletin(text):
 
 
 def encontrarFecha(text):
-    patronfecha = r'([0][1-9]|[12][0-9]|3[01])(\/|-)([0][1-9]|[1][0-2])\2(\d{4})'
+    patronfecha = r"([0][1-9]|[12][0-9]|3[01])(\/|-)([0][1-9]|[1][0-2])\2(\d{4})"
     encontrado = re.search(patronfecha, text)
     if encontrado:
-        fecha = datetime.datetime.strptime(encontrado.group(), '%d/%m/%Y')
+        fecha = datetime.datetime.strptime(encontrado.group(), "%d/%m/%Y")
         return fecha.date()
     return None
 
 
 def encontrarFechaConstitucionSAS(texto):
-    patronfecha = r'([0][1-9]|[12][0-9]|3[01])(\/|-)([0][1-9]|[1][0-2])\2(\d{4})'
-    patron = re.compile(r'\s+')
+    patronfecha = r"([0][1-9]|[12][0-9]|3[01])(\/|-)([0][1-9]|[1][0-2])\2(\d{4})"
+    patron = re.compile(r"\s+")
     palabras = patron.split(texto)
     textoAnalizar = palabras[1]
 
     encontrado = re.search(patronfecha, textoAnalizar)
     if encontrado:
-        fecha = datetime.datetime.strptime(encontrado.group(), '%d/%m/%Y')
+        fecha = datetime.datetime.strptime(encontrado.group(), "%d/%m/%Y")
         return fecha.date()
     print("No se ha encontrado ninguna fecha")
     return None
 
 
 def encontrarCUIT(texto):
-    patronfecha = r'\b(30|33|34)(\D)?[0-9]{8}(\D)?[0-9]'
+    patronfecha = r"\b(30|33|34)(\D)?[0-9]{8}(\D)?[0-9]"
     encontrado = re.search(patronfecha, texto)
     if encontrado:
         return encontrado.group()
-    return ''
+    return ""
 
 
 def reemplazar_caracteres_especiales(text):
-    return text.replace('.', '').replace(',', '').replace(';', '').replace('-', '')
+    return text.replace(".", "").replace(",", "").replace(";", "").replace("-", "")
 
 
 def encontrarFechaConstitucion(texto):
-    patronfecha = r'([0][1-9]|[12][0-9]|3[01])(\/|-)([0][1-9]|[1][0-2]|[1-9])\2(\d{4})'
-    patronSeparar = re.compile(r'\s+')
+    patronfecha = r"([0][1-9]|[12][0-9]|3[01])(\/|-)([0][1-9]|[1][0-2]|[1-9])\2(\d{4})"
+    patronSeparar = re.compile(r"\s+")
     palabras = patronSeparar.split(texto)
     fechas = []
-    fecha_referencia = datetime.datetime.strptime('01/01/2017', '%d/%m/%Y')
+    fecha_referencia = datetime.datetime.strptime("01/01/2017", "%d/%m/%Y")
 
     for palabra in palabras:
         if re.search(patronfecha, palabra):
@@ -60,26 +60,26 @@ def encontrarFechaConstitucion(texto):
 
     for fecha in fechas:
         try:
-            fecha_aux = datetime.datetime.strptime(fecha, '%d/%m/%Y')
+            fecha_aux = datetime.datetime.strptime(fecha, "%d/%m/%Y")
         except:
             continue
         if fecha_aux > fecha_referencia:
             fecha_referencia = fecha_aux
 
-    return fecha_referencia.date().strftime('%Y-%m-%d')
+    return fecha_referencia.date().strftime("%Y-%m-%d")
 
 
 def encontrarIdTitulo(string):
     string = string.lower()
     patron5 = re.compile(
-        r'\brenuncia|renunció|designa|designó|directorio|director|suplente|directora|cargo|cargos|renuncia|gerente|directores|suplentes\b')  # Designación, modificación autoridades, directorio, gerencia
-    patron35 = re.compile(r'\bsede social|domicilio\b')
-    patron27 = re.compile(r'\bcapital social\b')
-    patron58 = re.compile(
-        r'\brectifica|ratifica|complementa|aclara\b')
-    patron83 = re.compile(r'\bbalance|estados contables\b')
-    patron10 = re.compile(r'\bescisi|escisión|fusi|fusión\b')
-    patron6 = re.compile(r'\basamblea\b')
+        r"\brenuncia|renunció|designa|designó|directorio|director|suplente|directora|cargo|cargos|renuncia|gerente|directores|suplentes\b"
+    )  # Designación, modificación autoridades, directorio, gerencia
+    patron35 = re.compile(r"\bsede social|domicilio\b")
+    patron27 = re.compile(r"\bcapital social\b")
+    patron58 = re.compile(r"\brectifica|ratifica|complementa|aclara\b")
+    patron83 = re.compile(r"\bbalance|estados contables\b")
+    patron10 = re.compile(r"\bescisi|escisión|fusi|fusión\b")
+    patron6 = re.compile(r"\basamblea\b")
 
     if re.search(patron5, string):
         return "5"
@@ -100,23 +100,36 @@ def encontrarIdTitulo(string):
 
 def encontrarTipoSociedad(string):
     string = string.strip()
-    patron1 = re.compile(r'S.R.L|SOCIEDAD DE RESPONSABILIDAD LIMITADA|SRL|S.R.L.|S R L$')
-    patron2 = re.compile(r'S.A.|S.A|S A|S. A.|S. A|SA')
-    patron3 = re.compile(r'S\.C\.$|SOCIEDAD CIVIL|S\.C$|SC$|S C$|S.C.')
-    patron5 = re.compile(r'ASOCIACION MUTUAL|ASOCIACIÓN MUTUAL')
-    patron9 = re.compile(r'S.H.$|SOCIEDAD COLECTIVA|S.H$|SH$|S H$')
-    patron12 = re.compile(r'S.C.$|S.C$|SC$|S C$')
-    patron14 = re.compile(r'U\.T\.E\.$|U\.T\.E$|UTE$|U T E$')
-    patron29 = re.compile(r'S\.C\.S\.$|SOCIEDAD EN COMANDITA SIMPLE|S\.C\.S$|SCS$|S C S$')
+    patron1 = re.compile(
+        r"S.R.L|SOCIEDAD DE RESPONSABILIDAD LIMITADA|SRL|S.R.L.|S R L$"
+    )
+    patron2 = re.compile(r"S.A.|S.A|S A|S. A.|S. A|SA")
+    patron3 = re.compile(r"S\.C\.$|SOCIEDAD CIVIL|S\.C$|SC$|S C$|S.C.")
+    patron5 = re.compile(r"ASOCIACION MUTUAL|ASOCIACIÓN MUTUAL")
+    patron9 = re.compile(r"S.H.$|SOCIEDAD COLECTIVA|S.H$|SH$|S H$")
+    patron12 = re.compile(r"S.C.$|S.C$|SC$|S C$")
+    patron14 = re.compile(r"U\.T\.E\.$|U\.T\.E$|UTE$|U T E$")
+    patron29 = re.compile(
+        r"S\.C\.S\.$|SOCIEDAD EN COMANDITA SIMPLE|S\.C\.S$|SCS$|S C S$"
+    )
     patron30 = re.compile(
-        r'S.A.S.|S. A. S.|S .A .S|SOCIEDAD ANÓNIMA SIMPLIFICADA|SOCIEDAD ANONIMA SIMPLIFICADA|S\.A\.S$|SAS$|S A S$|SAS - Sociedad Anónima Simplificada')
-    patron38 = re.compile(r'S\.C\.A\.$|SOCIEDAD EN COMANDITA POR ACCIONES|S\.C\.A$|SCA$|S C A$')
-    patron41 = re.compile(r'S\.C\.I\.$|SOCIEDAD DE CAPITAL E INDUSTRIA|S\.C\.I$|SCI$|S C I$')
-    patron42 = re.compile(r'COOPERATIVA')
-    patron43 = re.compile(r'FIDEICOMISO')
-    patron45 = re.compile(r'A\.C\.$|ASOCIACION CIVIL|ASOCIACIÓN|ASOCIACION|ASOCIACIÓN CIVIL|A\.C$|AC$|A C$')
-    patron46 = re.compile(r'AGRUPACION DE COLABORACION EMPRESARIA|AGRUPACIÓN DE COLABORACIÓN EMPRESARIA')
-    patron47 = re.compile(r'SOCIEDAD POR ACCIONES SIMPLIFICADA')
+        r"S.A.S.|S. A. S.|S .A .S|SOCIEDAD ANÓNIMA SIMPLIFICADA|SOCIEDAD ANONIMA SIMPLIFICADA|S\.A\.S$|SAS$|S A S$|SAS - Sociedad Anónima Simplificada"
+    )
+    patron38 = re.compile(
+        r"S\.C\.A\.$|SOCIEDAD EN COMANDITA POR ACCIONES|S\.C\.A$|SCA$|S C A$"
+    )
+    patron41 = re.compile(
+        r"S\.C\.I\.$|SOCIEDAD DE CAPITAL E INDUSTRIA|S\.C\.I$|SCI$|S C I$"
+    )
+    patron42 = re.compile(r"COOPERATIVA")
+    patron43 = re.compile(r"FIDEICOMISO")
+    patron45 = re.compile(
+        r"A\.C\.$|ASOCIACION CIVIL|ASOCIACIÓN|ASOCIACION|ASOCIACIÓN CIVIL|A\.C$|AC$|A C$"
+    )
+    patron46 = re.compile(
+        r"AGRUPACION DE COLABORACION EMPRESARIA|AGRUPACIÓN DE COLABORACIÓN EMPRESARIA"
+    )
+    patron47 = re.compile(r"SOCIEDAD POR ACCIONES SIMPLIFICADA")
 
     if re.search(patron30, string):
         return "30"
@@ -164,17 +177,17 @@ def get_razon_social_aviso(text, header):
     for patron in Config.PATRONES_RAZON_SOCIAL_AVISO:
         encontrado = re.search(patron, text[30:])
         if encontrado:
-            x = re.search(r'\(\s*(.*)\)', encontrado.group(1))
+            x = re.search(r"\(\s*(.*)\)", encontrado.group(1))
             if x:
                 if len(encontrado.group(1)) > 51:
                     return get_razon_social(header)
-                return f'{encontrado.group(1)[:x.span()[0]]} - CONST'
+                return f"{encontrado.group(1)[:x.span()[0]]} - CONST"
     return get_razon_social(header)
 
 
 def encontrarCapitalSocial(string):
-    patronPrecio = re.compile(r'(\$[0-9]*)')
-    palabras = [eliminar_decimales(x) for x in re.compile(r'\s+').split(string)]
+    patronPrecio = re.compile(r"(\$[0-9]*)")
+    palabras = [eliminar_decimales(x) for x in re.compile(r"\s+").split(string)]
     palabras = [eliminar_espacio_signo_peso(x) for x in palabras]
     precios = []
     numMayor = 0
@@ -198,14 +211,14 @@ def encontrarCapitalSocial(string):
 def eliminar_decimales(numero):
     aux = re.search(r"\.[0-9]{2}(?![0-9]+)", numero)
     if aux:
-        numero = ''.join(list(numero)[:aux.start()])
-    return numero.replace('.', '')
+        numero = "".join(list(numero)[: aux.start()])
+    return numero.replace(".", "")
 
 
 def eliminar_espacio_signo_peso(texto):
     aux = re.search(r"(\$\s[0-9]*)", texto)
     if aux:
-        texto_sin_espacio = list(texto[aux.start(): aux.end()])
-        texto_sin_espacio[1] = ''
-        return ''.join(texto_sin_espacio)
+        texto_sin_espacio = list(texto[aux.start() : aux.end()])
+        texto_sin_espacio[1] = ""
+        return "".join(texto_sin_espacio)
     return texto

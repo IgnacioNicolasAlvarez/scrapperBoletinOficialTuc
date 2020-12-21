@@ -1,18 +1,21 @@
 import sys
-from time import sleep
 
 from config import Config
 from helpers.helper_url import RecolectorUrls
 from helpers.for_dates import get_current_format_date
 from db.persistence import Persistence, StrategyMongo, StrategyPrintInScreen
 from scrapper.scrapper import Scrapper
+from logger import guardar_log
 
 from tqdm import tqdm
 
 
 def main(dates):
-    Config.payload['fechaboletin1'] = dates[1]
-    Config.payload['fechaboletin2'] = dates[2]
+
+    guardar_log("info", f"Inicio de carga - Fecha: {dates[1]} - {dates[2]}")
+
+    Config.payload["fechaboletin1"] = dates[1]
+    Config.payload["fechaboletin2"] = dates[2]
 
     print("Empezando recoleccion de URLs")
 
@@ -25,20 +28,25 @@ def main(dates):
 
     print("Empezando Almacenamiento de datos en BD")
     try:
-        persistence = Persistence([
-            # StrategyPrintInScreen(),
-            StrategyMongo(Config.DB_MONGO),
-            # StrategyDatabase(Config.DB_PROD)
-        ])
+        persistence = Persistence(
+            [
+                # StrategyPrintInScreen(),
+                StrategyMongo(Config.DB_MONGO),
+                # StrategyDatabase(Config.DB_PROD)
+            ]
+        )
         for a in tqdm(avisos):
-            sleep(0.10)
             persistence.persist(a)
     except Exception as e:
         print(f"Error app: {e}")
-    print("Fin del proceso.")
+
+    finally:
+        print("Fin del proceso")
+        guardar_log("info", f"Fin de carga - Fecha: {dates[1]} - {dates[2]}")
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
+
     if len(sys.argv) == 1:
         dates = [0, get_current_format_date(), get_current_format_date()]
         main(dates)
@@ -47,5 +55,6 @@ if __name__ == '__main__':
         main(sys.argv)
     else:
         print(
-            'Cantidad Incorrecta de Parametros. No ingrese ningun parametro para tomar fecha actual o bien ingrese '
-            'fecha de inicio y final segun el formato dd/mm/yyyy dd/mm/yyyy')
+            "Cantidad Incorrecta de Parametros. No ingrese ningun parametro para tomar fecha actual o bien ingrese "
+            "fecha de inicio y final segun el formato dd/mm/yyyy dd/mm/yyyy"
+        )

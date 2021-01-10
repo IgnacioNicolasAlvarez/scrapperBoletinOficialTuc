@@ -2,7 +2,7 @@ import requests
 from bs4 import BeautifulSoup
 from tqdm import tqdm
 
-from model.model import Aviso
+from model.aviso import Aviso
 from helpers.expresionesRegularesF import *
 from helpers.for_categorias import isCategoriaRequerida
 from helpers import helper

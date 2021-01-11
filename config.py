@@ -30,7 +30,10 @@ class Config:
         r'"(.*)"',
     ]
 
-    PATRONES_RAZON_SOCIAL_AVISO = [r"\"(.*)\"", r"\“(.*)\”"]
+    PATRONES_RAZON_SOCIAL_AVISO = [
+        r"\"(.*)\"",
+        r"\“(.*)\”",
+    ]
 
     URLS = {
         "base_url": "https://boletin.tucuman.gov.ar/",
@@ -42,33 +45,27 @@ class Config:
         "User-Agent": crear_random_agent(),
         "Referer": URLS["tabla_url"],
     }
-    payload = {
-        "tiposinstrumentos": "0",
-        "TiposJudiciales": "0",
-        "TiposComunes": "0",
-        "fechaboletin1": None,
-        "fechaboletin2": None,
-        "offset": 0,
-        "Submit": "Buscar",
-    }
-    offset_increment = 15
-
-    reg_ex_head_0 = r"([0-9]{5})\s{15}"
-    reg_ex_head_1 = r"(\d{2}/\d{2}/\d{4})"
-    reg_ex_head_2 = r"Nro:\s{15}(\d{5,6})"
-    reg_ex_head_3 = (
-        r"Nro:\s{15}\d{5,6}([JUICIOS|RESOLUCIONES|DECRETO|GENERALES|VARIOS].*$)"
-    )
-
+    
     reg_categorias_solicitadas = ["SOCIEDADES", "ASAMBLEAS", "AVISOS"]
 
     dotenv.load("./.env")
-    DB_AZURE = {
-        "DB_HOST": dotenv.get("DB_HOST_AZURE"),
-        "DB_NAME": dotenv.get("DB_NAME_AZURE", default=""),
-        "DB_USER": dotenv.get("DB_USER_AZURE"),
-        "DB_PASS": str(dotenv.get("DB_PASS_AZURE")),
-        "DB_PORT": dotenv.get("DB_PORT_AZURE", default="3306"),
+
+    reg_ex_head_0 = dotenv.get("REGEX_HEAD_0")
+    reg_ex_head_1 = dotenv.get("REGEX_HEAD_1")
+    reg_ex_head_2 = dotenv.get("REGEX_HEAD_2")
+    reg_ex_head_3 = dotenv.get("REGEX_HEAD_3")
+
+    OFFSET_INCREMENTO = dotenv.get("OFFSET_INCREMENTO")
+
+
+    PAYLOAD = {
+        "tiposinstrumentos": dotenv.get("TIPOS_INSTRUMENTOS"),
+        "TiposJudiciales": dotenv.get("TIPOS_JUDICIALES"),
+        "TiposComunes": dotenv.get("TIPOS_COMUNES"),
+        "fechaboletin1": dotenv.get("FECHA_1"),
+        "fechaboletin2": dotenv.get("FECHA_2"),
+        "offset": dotenv.get("OFFSET"),
+        "Submit": dotenv.get("SUBMIT"),
     }
 
     DB_DOCKER = {

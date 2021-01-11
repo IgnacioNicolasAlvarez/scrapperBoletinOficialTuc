@@ -9,7 +9,7 @@ from helpers.expresionesRegularesF import (
     get_razon_social_aviso,
 )
 from helpers.for_categorias import get_tipo_categoria
-from helpers.for_dates import get_date_in_format
+from helpers.helpers_fechas import obtener_fecha_format
 from helpers.helper import get_feature_from_tittle
 
 
@@ -24,7 +24,7 @@ class Aviso:
         self.nro_boletin = get_feature_from_tittle(
             pattern=Config.reg_ex_head_0, text=header_text
         )
-        self.fecha_aviso = get_date_in_format(
+        self.fecha_aviso = obtener_fecha_format(
             get_feature_from_tittle(pattern=Config.reg_ex_head_1, text=header_text)
         )
         self.nro_aviso = get_feature_from_tittle(

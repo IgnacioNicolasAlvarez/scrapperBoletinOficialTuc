@@ -13,7 +13,7 @@ from logger import guardar_log
 
 class Scrapper:
     @wait(3)
-    def extract_data(self, links):
+    def extraer_datos_urls(self, links):
         lista_avisos = []
 
         for link in tqdm(links):

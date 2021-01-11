@@ -8,44 +8,47 @@ from pymongo import MongoClient
 from logger import guardar_log
 
 
-class Persistence:
+class Persistencia:
     def __init__(self, strategies):
         self._strategies = strategies
 
-    def persist(self, aviso):
+    def persistir(self, aviso):
         sleep(0.10)
+        cant_registros = 0
         for strategy in self._strategies:
-            strategy.persist(aviso)
+            cant_registros += strategy.persistir(aviso)
+        return cant_registros
 
 
-class Strategy:
+class Estrategia:
     @abstractmethod
-    def persist(self, aviso):
-        pass
+    def persistir(self, aviso):
+        return 0
 
 
-class StrategyPrintInScreen(Strategy):
-    def persist(self, aviso):
-        print(aviso.__dict__)
+class Estrategia_Dummy(Estrategia):
+    def persistir(self, aviso):
+        return 1
 
 
-class StrategyMongo(Strategy):
+class Estatregia_Mongo(Estrategia):
     def __init__(self, uri):
         self.conection_str = uri
 
-    def persist(self, aviso):
+    def persistir(self, aviso):
         client = MongoClient(self.conection_str)
         db = client.Boletin
         try:
             db.aviso.insert_one(aviso.__dict__)
+            return 1
         except Exception as e:
             guardar_log(
                 "error", f"Conexion insert en MongoDB - Aviso: {aviso.nro_aviso}"
             )
-            pass
+            return 0
 
 
-class StrategyDatabase(Strategy):
+class Estrategia_SQL(Estrategia):
     def __init__(self, db_config):
         self.host = db_config["DB_HOST"]
         self.name = db_config["DB_NAME"]
@@ -53,9 +56,10 @@ class StrategyDatabase(Strategy):
         self.password = db_config["DB_PASS"]
         self.port = db_config["DB_PORT"]
 
-    def persist(self, aviso):
+    def persistir(self, aviso):
         connection = mysql.connector.connect()
         cursor = None
+        registro_insertado = 0
         try:
             connection = mysql.connector.connect(
                 host=self.host,
@@ -87,6 +91,7 @@ class StrategyDatabase(Strategy):
                     """
                 cursor.execute(query)
                 connection.commit()
+                registro_insertado = 1
 
         except Error as e:
             guardar_log("error", f"Conexion insert en SQL - Aviso: {aviso.nro_aviso}")
@@ -96,3 +101,4 @@ class StrategyDatabase(Strategy):
                 cursor.close()
                 connection.rollback()
                 connection.close()
+                return registro_insertado

@@ -4,11 +4,11 @@ from helpers.d_wait import wait
 from config import Config
 
 
-class RecolectorUrls:
+class Recolector:
     def __init__(self):
         self.flag_ultima_hoja = True
 
-    def get_urls(self, headers, params):
+    def obtener_urls(self, headers, params):
         links = []
         url_base = Config.URLS["tabla_url"]
 
@@ -19,7 +19,7 @@ class RecolectorUrls:
                 break
 
             links.extend(urls_or_none)
-            params["offset"] += Config.offset_increment
+            params["offset"] += Config.OFFSET_INCREMENTO
         return links
 
     @wait(3)

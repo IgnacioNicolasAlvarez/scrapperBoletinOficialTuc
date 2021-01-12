@@ -12,6 +12,21 @@ def crear_random_agent():
     return UserAgent().random
 
 
+def reiniciar_config():
+    dotenv.load("./.env")
+    Config.OFFSET_INCREMENTO = dotenv.get("OFFSET_INCREMENTO")
+    Config.PAYLOAD = {
+        "tiposinstrumentos": dotenv.get("TIPOS_INSTRUMENTOS"),
+        "TiposJudiciales": dotenv.get("TIPOS_JUDICIALES"),
+        "TiposComunes": dotenv.get("TIPOS_COMUNES"),
+        "fechaboletin1": dotenv.get("FECHA_1"),
+        "fechaboletin2": dotenv.get("FECHA_2"),
+        "offset": dotenv.get("OFFSET"),
+        "Submit": dotenv.get("SUBMIT"),
+    }
+
+
+
 class Config:
 
     BAN_SOCIEDADES = obtener_avisos_excluidos("AVISOS_EXCLUIDOS.TXT")
@@ -45,7 +60,7 @@ class Config:
         "User-Agent": crear_random_agent(),
         "Referer": URLS["tabla_url"],
     }
-    
+
     reg_categorias_solicitadas = ["SOCIEDADES", "ASAMBLEAS", "AVISOS"]
 
     dotenv.load("./.env")
@@ -56,7 +71,6 @@ class Config:
     reg_ex_head_3 = dotenv.get("REGEX_HEAD_3")
 
     OFFSET_INCREMENTO = dotenv.get("OFFSET_INCREMENTO")
-
 
     PAYLOAD = {
         "tiposinstrumentos": dotenv.get("TIPOS_INSTRUMENTOS"),

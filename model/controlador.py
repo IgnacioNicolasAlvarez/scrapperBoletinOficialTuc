@@ -1,4 +1,4 @@
-from config import Config
+from config import Config, reiniciar_config
 from db.persistencia import (
     Persistencia,
     Estatregia_Mongo,
@@ -8,22 +8,28 @@ from db.persistencia import (
 from model.scrapper import Scrapper
 from model.recolector import Recolector
 from logger import guardar_log
+from helpers.helpers_fechas import obtener_fecha_format
 
 from tqdm import tqdm
 
 
 class Controlador:
-    def __init__(self, fechas):
-        self.fechas = fechas
+    def __init__(self, fechas=None):
+        self.fechas = [] if not fechas else fechas
         self.setear_fechas_config()
 
     def setear_fechas_config(self):
-        Config.PAYLOAD["fechaboletin1"] = self.fechas[1]
-        Config.PAYLOAD["fechaboletin2"] = self.fechas[2]
+        
+        if not self.fechas:
+            self.fechas.append(obtener_fecha_format())
+            self.fechas.append(obtener_fecha_format())
+
+        Config.PAYLOAD["fechaboletin1"] =  obtener_fecha_format(self.fechas[0])
+        Config.PAYLOAD["fechaboletin2"] =  obtener_fecha_format(self.fechas[1])
 
     def procesar(self):
         guardar_log(
-            "info", f"Inicio de carga - Fecha: {self.fechas[1]} - {self.fechas[2]}"
+            "info", f"Inicio de carga - Fecha: {self.fechas[0]} - {self.fechas[1]}"
         )
 
         print("Empezando recoleccion de URLs")
@@ -54,5 +60,6 @@ class Controlador:
             print("Fin del proceso")
             guardar_log(
                 "info",
-                f"Fin de carga - Fecha: ({self.fechas[1]} - {self.fechas[2]}) - Cantidad registros: {cant_registros}",
+                f"Fin de carga - Fecha: ({self.fechas[0]} - {self.fechas[1]}) - Cantidad registros: {cant_registros}",
             )
+            reiniciar_config()

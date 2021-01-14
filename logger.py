@@ -8,9 +8,10 @@ logging.basicConfig(
 )
 
 
-def guardar_log(level, message):
 
-    if level.lower() == "error":
-        logging.warning(message)
-    elif level.lower() == "info":
-        logging.info(message)
+def guardar_log(nivel, mensaje):
+
+    if nivel.lower() == "info":
+        logging.info(mensaje)
+    else:
+        logging.warning(mensaje)

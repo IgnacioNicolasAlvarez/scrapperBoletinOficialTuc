@@ -19,13 +19,11 @@ class Controlador:
         self.setear_fechas_config()
 
     def setear_fechas_config(self):
-        
         if not self.fechas:
             self.fechas.append(obtener_fecha_format())
             self.fechas.append(obtener_fecha_format())
-
-        Config.PAYLOAD["fechaboletin1"] =  obtener_fecha_format(self.fechas[0])
-        Config.PAYLOAD["fechaboletin2"] =  obtener_fecha_format(self.fechas[1])
+        Config.PAYLOAD["fechaboletin1"] = obtener_fecha_format(self.fechas[0])
+        Config.PAYLOAD["fechaboletin2"] = obtener_fecha_format(self.fechas[1])
 
     def procesar(self):
         guardar_log(
@@ -33,7 +31,6 @@ class Controlador:
         )
 
         print("Empezando recoleccion de URLs")
-
         recolector = Recolector()
         urls = recolector.obtener_urls(Config.headers, Config.PAYLOAD)
 

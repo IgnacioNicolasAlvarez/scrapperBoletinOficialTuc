@@ -9,6 +9,7 @@ from model.scrapper import Scrapper
 from model.recolector import Recolector
 from logger import guardar_log
 from helpers.helpers_fechas import obtener_fecha_format
+from .mails import MailSender
 
 from tqdm import tqdm
 
@@ -59,4 +60,6 @@ class Controlador:
                 "info",
                 f"Fin de carga - Fecha: ({self.fechas[0]} - {self.fechas[1]}) - Cantidad registros: {cant_registros}",
             )
+            mail_sender = MailSender(fecha=obtener_fecha_format())
+            mail_sender.enviar_correo()
             reiniciar_config()

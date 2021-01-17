@@ -26,8 +26,10 @@ def reiniciar_config():
     }
 
 
-
 class Config:
+    dotenv.load("./.env")
+
+    HORA_EJECUCION = dotenv.get("HORA_EJECUCION")
 
     BAN_SOCIEDADES = obtener_avisos_excluidos("AVISOS_EXCLUIDOS.TXT")
 
@@ -63,8 +65,6 @@ class Config:
 
     reg_categorias_solicitadas = ["SOCIEDADES", "ASAMBLEAS", "AVISOS"]
 
-    dotenv.load("./.env")
-
     reg_ex_head_0 = dotenv.get("REGEX_HEAD_0")
     reg_ex_head_1 = dotenv.get("REGEX_HEAD_1")
     reg_ex_head_2 = dotenv.get("REGEX_HEAD_2")
@@ -98,3 +98,11 @@ class Config:
     }
 
     DB_MONGO = dotenv.get("DB_MONGO")
+
+    MAIL = {
+        "MAIL_LOG": dotenv.get("MAIL_LOG"),
+        "MAIL_DESTINO": dotenv.get("MAIL_DESTINO"),
+        "MAIL_USUARIO": dotenv.get("MAIL_USUARIO"),
+        "MAIL_ASUNTO": dotenv.get("MAIL_ASUNTO"),
+        "MAIL_KEY": dotenv.get("MAIL_SENDGRID_KEY"),
+    }

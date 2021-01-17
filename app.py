@@ -3,6 +3,7 @@ import argparse
 import datetime
 import time
 
+from config import Config
 from model.controlador import Controlador
 import schedule
 
@@ -44,7 +45,7 @@ def job():
     del controlador
 
 
-# schedule.every().day.at("10:30").do(job)
+# schedule.every().day.at(Config.HORA_EJECUCION).do(job)
 schedule.every(1).minutes.do(job)
 
 

@@ -25,15 +25,22 @@ argumentos_consola = argparse.ArgumentParser(
 )
 
 argumentos_consola.add_argument(
-    "--es_programado", nargs="?", type=str2bool, const=True, default=False
+    "--es_programado",
+    nargs="?",
+    type=str2bool,
+    const=True,
+    default=False,
+    required=True,
 )
 argumentos_consola.add_argument(
-    "--fecha_desde",
+    "--fd",
     type=lambda s: datetime.datetime.strptime(s, "%d/%m/%Y"),
     required=False,
+    help="Fecha desde",
 )
 argumentos_consola.add_argument(
-    "--fecha_hasta",
+    "--fh",
+    help="Fecha hasta",
     type=lambda s: datetime.datetime.strptime(s, "%d/%m/%Y"),
     required=False,
 )
@@ -56,5 +63,5 @@ if __name__ == "__main__":
         schedule.run_pending()
         time.sleep(1)
 
-    controlador = Controlador([args.fecha_desde, args.fecha_hasta])
+    controlador = Controlador([args.fd, args.fh])
     controlador.procesar()

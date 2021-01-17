@@ -1,10 +1,6 @@
 from config import Config, reiniciar_config
-from db.persistencia import (
-    Persistencia,
-    Estatregia_Mongo,
-    Estrategia_SQL,
-    Estrategia_Dummy,
-)
+from db.persistencia import Persistencia
+from db.estrategia import Estatregia_Mongo, Estrategia_SQL, Estrategia_Dummy
 from model.scrapper import Scrapper
 from model.recolector import Recolector
 from logger import guardar_log
@@ -56,10 +52,11 @@ class Controlador:
 
         finally:
             print("Fin del proceso")
+            mensaje = f"Fin de carga \n\n Fecha: ({Config.PAYLOAD['fechaboletin1']} - {Config.PAYLOAD['fechaboletin2']}) - Cantidad registros: {cant_registros}"
             guardar_log(
                 "info",
-                f"Fin de carga - Fecha: ({self.fechas[0]} - {self.fechas[1]}) - Cantidad registros: {cant_registros}",
+                mensaje,
             )
             mail_sender = MailSender(fecha=obtener_fecha_format())
-            mail_sender.enviar_correo()
+            mail_sender.enviar_correo(mensaje)
             reiniciar_config()

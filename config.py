@@ -100,9 +100,8 @@ class Config:
     DB_MONGO = dotenv.get("DB_MONGO")
 
     MAIL = {
-        "MAIL_LOG": dotenv.get("MAIL_LOG"),
         "MAIL_DESTINO": dotenv.get("MAIL_DESTINO"),
         "MAIL_USUARIO": dotenv.get("MAIL_USUARIO"),
         "MAIL_ASUNTO": dotenv.get("MAIL_ASUNTO"),
-        "MAIL_KEY": dotenv.get("MAIL_SENDGRID_KEY"),
+        "MAIL_PASS": dotenv.get("MAIL_PASS"),
     }

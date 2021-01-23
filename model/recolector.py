@@ -13,7 +13,7 @@ class Recolector:
         url_base = Config.URLS["tabla_url"]
 
         while True:
-            urls_or_none = self._get_urls(url_base, headers, params)
+            urls_or_none = self._obtener_urls(url_base, headers, params)
 
             if urls_or_none is None:
                 break
@@ -23,7 +23,7 @@ class Recolector:
         return links
 
     @wait(3)
-    def _get_urls(self, url_tabla, headers, payload):
+    def _obtener_urls(self, url_tabla, headers, payload):
         response = requests.get(url_tabla, headers=headers, params=payload)
         bs = BeautifulSoup(response.text, "html.parser")
         a_tag_list = bs.find_all("a", href=True)

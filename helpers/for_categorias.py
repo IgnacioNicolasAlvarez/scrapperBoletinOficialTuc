@@ -17,7 +17,7 @@ def get_tipo_categoria(text):
 
 
 def isCategoriaRequerida(text):
-    for cat in Config.reg_categorias_solicitadas:
+    for cat in Config.CATEGORIAS_SOLICITADAS:
         if cat in text:
             return True
     return False

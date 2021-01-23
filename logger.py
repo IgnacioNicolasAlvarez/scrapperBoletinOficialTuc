@@ -7,11 +7,11 @@ logging.basicConfig(
     format="%(asctime)s:%(levelname)s:%(message)s",
 )
 
+class Logger:
 
-
-def guardar_log(nivel, mensaje):
-
-    if nivel.lower() == "info":
-        logging.info(mensaje)
-    else:
-        logging.warning(mensaje)
+    @staticmethod
+    def guardar_log(nivel, mensaje):
+        if nivel.lower() == "info":
+            logging.info(mensaje)
+        else:
+            logging.warning(mensaje)

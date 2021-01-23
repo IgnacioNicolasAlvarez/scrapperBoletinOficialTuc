@@ -4,7 +4,7 @@ import mysql.connector
 from mysql.connector import Error
 from pymongo import MongoClient
 
-from logger import guardar_log
+from logger import Logger
 
 
 class Estrategia:
@@ -29,7 +29,7 @@ class Estatregia_Mongo(Estrategia):
             db.aviso.insert_one(aviso.__dict__)
             return 1
         except Exception as e:
-            guardar_log(
+            Logger.guardar_log(
                 "error", f"Conexion insert en MongoDB - Aviso: {aviso.nro_aviso}"
             )
             return 0

@@ -22,16 +22,16 @@ class Aviso:
 
         self.texto = text
         self.nro_boletin = get_feature_from_tittle(
-            pattern=Config.reg_ex_head_0, text=header_text
+            pattern=Config.REGEX_HEADER_0, text=header_text
         )
         self.fecha_aviso = obtener_fecha_format(
-            get_feature_from_tittle(pattern=Config.reg_ex_head_1, text=header_text)
+            get_feature_from_tittle(pattern=Config.REGEX_HEADER_1, text=header_text)
         )
         self.nro_aviso = get_feature_from_tittle(
-            pattern=Config.reg_ex_head_2, text=header_text
+            pattern=Config.REGEX_HEADER_2, text=header_text
         )
         self.id_tipo_aviso = get_tipo_categoria(
-            get_feature_from_tittle(pattern=Config.reg_ex_head_3, text=header_text)
+            get_feature_from_tittle(pattern=Config.REGEX_HEADER_3, text=header_text)
         )
         self.razon_social = get_razon_social_aviso(text=text, header=header_text)
         self.id_tipo_sociedad = encontrarTipoSociedad(header_text)

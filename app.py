@@ -1,67 +1,7 @@
-import sys
-import argparse
-import datetime
-import time
+from main import main
 
-from config import Config
-from model.controlador import Controlador
-import schedule
-
-
-def str2bool(v):
-    if isinstance(v, bool):
-        return v
-    if v.lower() in ("yes", "true", "t", "y", "1"):
-        return True
-    elif v.lower() in ("no", "false", "f", "n", "0"):
-        return False
-    else:
-        raise argparse.ArgumentTypeError("Boolean value expected.")
-
-
-argumentos_consola = argparse.ArgumentParser(
-    prog="app",
-    description="Scrapper del Boletín Oficial de la Provincia de Tucumán",
-)
-
-argumentos_consola.add_argument(
-    "--es_programado",
-    nargs="?",
-    type=str2bool,
-    const=True,
-    default=False,
-    required=True,
-)
-argumentos_consola.add_argument(
-    "--fd",
-    type=lambda s: datetime.datetime.strptime(s, "%d/%m/%Y"),
-    required=False,
-    help="Fecha desde",
-)
-argumentos_consola.add_argument(
-    "--fh",
-    help="Fecha hasta",
-    type=lambda s: datetime.datetime.strptime(s, "%d/%m/%Y"),
-    required=False,
-)
-
-
-def job():
-    controlador = Controlador()
-    controlador.procesar()
-    del controlador
-
-
-# schedule.every().day.at(Config.HORA_EJECUCION).do(job)
-schedule.every(1).minutes.do(job)
+import typer
 
 
 if __name__ == "__main__":
-    args = argumentos_consola.parse_args()
-
-    while args.es_programado:
-        schedule.run_pending()
-        time.sleep(1)
-
-    controlador = Controlador([args.fd, args.fh])
-    controlador.procesar()
+    typer.run(main)

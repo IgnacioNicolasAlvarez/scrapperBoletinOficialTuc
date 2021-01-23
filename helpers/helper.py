@@ -1,6 +1,6 @@
 import re
 
-from logger import guardar_log
+from logger import Logger
 
 
 def get_feature_from_tittle(pattern, text):
@@ -8,7 +8,7 @@ def get_feature_from_tittle(pattern, text):
     try:
         x = re.findall(pattern, text)[0]
     except Exception as e:
-        guardar_log(
-                "error", f"Imposibilidad de aplicar patron - Pattern: {pattern}"
-            )
+        Logger.guardar_log(
+            "error", f"Imposibilidad de aplicar patron - Pattern: {pattern}"
+        )
     return x

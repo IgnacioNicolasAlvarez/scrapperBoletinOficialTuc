@@ -3,7 +3,7 @@ from db.persistencia import Persistencia
 from db.estrategia import Estatregia_Mongo, Estrategia_SQL, Estrategia_Dummy
 from model.scrapper import Scrapper
 from model.recolector import Recolector
-from logger import guardar_log
+from logger import Logger
 from helpers.helpers_fechas import obtener_fecha_format
 from .mails import MailSender
 
@@ -23,13 +23,13 @@ class Controlador:
         Config.PAYLOAD["fechaboletin2"] = obtener_fecha_format(self.fechas[1])
 
     def procesar(self):
-        guardar_log(
+        Logger.guardar_log(
             "info", f"Inicio de carga - Fecha: {self.fechas[0]} - {self.fechas[1]}"
         )
 
         print("Empezando recoleccion de URLs")
         recolector = Recolector()
-        urls = recolector.obtener_urls(Config.headers, Config.PAYLOAD)
+        urls = recolector.obtener_urls(Config.HEADERS, Config.PAYLOAD)
 
         print("Empezando extraccion de datos de Avisos")
         scrapper = Scrapper()
@@ -48,12 +48,12 @@ class Controlador:
             for a in tqdm(avisos):
                 cant_registros += persistencia.persistir(a)
         except Exception as e:
-            guardar_log("error", f"Persistiendo Aviso - Error: {e}")
+            Logger.guardar_log("error", f"Persistiendo Aviso - Error: {e}")
 
         finally:
             print("Fin del proceso")
             mensaje = f"Fin de carga \n\n Fecha: ({Config.PAYLOAD['fechaboletin1']} - {Config.PAYLOAD['fechaboletin2']}) - Cantidad registros: {cant_registros}"
-            guardar_log(
+            Logger.guardar_log(
                 "info",
                 mensaje,
             )

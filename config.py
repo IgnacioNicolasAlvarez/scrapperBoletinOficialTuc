@@ -57,18 +57,18 @@ class Config:
         "tabla_url": "https://boletin.tucuman.gov.ar/tabla",
     }
 
-    headers = {
+    HEADERS = {
         "X-Requested-With": "XMLHttpRequest",
         "User-Agent": crear_random_agent(),
         "Referer": URLS["tabla_url"],
     }
 
-    reg_categorias_solicitadas = ["SOCIEDADES", "ASAMBLEAS", "AVISOS"]
+    CATEGORIAS_SOLICITADAS = ["SOCIEDADES", "ASAMBLEAS", "AVISOS"]
 
-    reg_ex_head_0 = dotenv.get("REGEX_HEAD_0")
-    reg_ex_head_1 = dotenv.get("REGEX_HEAD_1")
-    reg_ex_head_2 = dotenv.get("REGEX_HEAD_2")
-    reg_ex_head_3 = dotenv.get("REGEX_HEAD_3")
+    REGEX_HEADER_0 = dotenv.get("REGEX_HEAD_0")
+    REGEX_HEADER_1 = dotenv.get("REGEX_HEAD_1")
+    REGEX_HEADER_2 = dotenv.get("REGEX_HEAD_2")
+    REGEX_HEADER_3 = dotenv.get("REGEX_HEAD_3")
 
     OFFSET_INCREMENTO = dotenv.get("OFFSET_INCREMENTO")
 

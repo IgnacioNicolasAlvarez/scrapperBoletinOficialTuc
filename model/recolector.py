@@ -15,7 +15,7 @@ class Recolector:
         while True:
             urls_or_none = self._obtener_urls(url_base, headers, params)
 
-            if urls_or_none is None:
+            if urls_or_none is None:    
                 break
 
             links.extend(urls_or_none)

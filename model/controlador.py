@@ -1,7 +1,7 @@
 from config import Config, reiniciar_config
 from db.persistencia import Persistencia
 from db.estrategia import Estatregia_Mongo, Estrategia_SQL, Estrategia_Dummy
-from model.scrapper import Scrapper
+from model.extractor import Extractor
 from model.recolector import Recolector
 from logger import Logger
 from helpers.helpers_fechas import obtener_fecha_format
@@ -32,8 +32,8 @@ class Controlador:
         urls = recolector.obtener_urls(Config.HEADERS, Config.PAYLOAD)
 
         print("Empezando extraccion de datos de Avisos")
-        scrapper = Scrapper()
-        avisos = scrapper.extraer_datos_urls(urls)
+        extractor = Extractor()
+        avisos = extractor.extraer_datos_urls(urls)
 
         print("Empezando Almacenamiento de datos en BD")
         try:

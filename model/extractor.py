@@ -29,7 +29,9 @@ class Extractor:
                     pattern=Config.REGEX_HEADER_3, text=texto_header
                 )
                 if isCategoriaRequerida(descripcion_aviso):
-                    if self._es_aviso_baneado(text) or self._es_aviso_baneado(texto_header):
+                    if self._es_aviso_baneado(text) or self._es_aviso_baneado(
+                        texto_header
+                    ):
                         lista_avisos.append(Aviso(text, texto_header))
 
         return lista_avisos
@@ -40,13 +42,11 @@ class Extractor:
         text = text.replace("”", "")
         return text
 
-
     def _es_aviso_baneado(self, text):
         for ban in Config.BAN_SOCIEDADES:
             if ban in text:
                 return False
         return True
-
 
     def _get_aviso_text(self, bs):
         texto_aviso = None
@@ -57,6 +57,3 @@ class Extractor:
             Logger.guardar_log("error", "Extraer info de aviso")
 
         return texto_aviso
-
-
-

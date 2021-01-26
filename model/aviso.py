@@ -1,16 +1,14 @@
 from config import Config
-from helpers.expresionesRegularesF import (
-    encontrarTipoSociedad,
-    get_razon_social,
-    encontrarIdTitulo,
-    encontrarFechaConstitucion,
-    encontrarCUIT,
-    encontrarCapitalSocial,
-    get_razon_social_aviso,
-)
+from helpers.expresionesRegularesF import (encontrarCapitalSocial,
+                                           encontrarCUIT,
+                                           encontrarFechaConstitucion,
+                                           encontrarIdTitulo,
+                                           encontrarTipoSociedad,
+                                           get_razon_social,
+                                           get_razon_social_aviso)
 from helpers.for_categorias import get_tipo_categoria
-from helpers.helpers_fechas import obtener_fecha_format
 from helpers.helper import get_feature_from_tittle
+from helpers.helpers_fechas import obtener_fecha_format
 
 
 class Aviso:

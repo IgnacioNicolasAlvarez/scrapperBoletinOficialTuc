@@ -11,3 +11,7 @@ class Persistencia:
         for estrategia in self.estrategias:
             cant_registros += estrategia.persistir(aviso)
         return cant_registros
+
+    def resetar_fecha(self, fechas):
+        for estrategia in self.estrategias:
+            estrategia.resetar_fecha(fechas)

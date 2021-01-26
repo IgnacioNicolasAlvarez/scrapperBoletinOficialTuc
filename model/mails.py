@@ -1,5 +1,4 @@
 import yagmail
-
 from config import Config
 
 

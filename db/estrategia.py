@@ -104,7 +104,7 @@ class Estrategia_SQL(Estrategia):
             if self.connection.is_connected():
                 query = f"""
                         delete auxiliar_tuc where 
-                        fecha_publicacion between '{fechas[0]}' and '{fechas[1]}';
+                        fecha between '{fechas[0]}' and '{fechas[1]}';
                     """
                 self.cursor.execute(query)
                 self.connection.commit()

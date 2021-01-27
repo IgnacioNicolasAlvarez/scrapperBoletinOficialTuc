@@ -18,7 +18,6 @@ class Estrategia:
 
 class Estrategia_Dummy(Estrategia):
     def persistir(self, aviso):
-        print(aviso.__dict__)
         return 1
 
     def resetar_fecha(self, fechas):
@@ -44,7 +43,7 @@ class Estatregia_Mongo(Estrategia):
     def resetar_fecha(self, fechas):
 
         try:
-            query = {"fecha_aviso": {"$gt": f"{fechas[0]}", "$lt": f"{fechas[1]}"}}
+            query = {"fecha_carga": {"$gt": f"{fechas[0]}", "$lt": f"{fechas[1]}"}}
             self.db.aviso.delete_many(query)
         except Exception as e:
             Logger.guardar_log(

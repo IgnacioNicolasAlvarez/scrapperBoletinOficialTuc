@@ -14,7 +14,7 @@ from logger import Logger
 class Extractor:
     @wait(3)
     def extraer_datos_urls(self, links):
-        lista_avisos = []
+        textos_y_encabezados = []
 
         for link in links:
             link = Config.URLS["base_url"] + link
@@ -23,18 +23,19 @@ class Extractor:
             tr = bs.find_all("tr", {"valign": "middle"})
 
             text = self._get_aviso_text(bs)
+
             for td in tr:
                 texto_header = self._limpiar_header(td)
                 descripcion_aviso = helper.get_feature_from_tittle(
                     pattern=Config.REGEX_HEADER_3, text=texto_header
                 )
-                if isCategoriaRequerida(descripcion_aviso):
-                    if self._es_aviso_baneado(text) or self._es_aviso_baneado(
-                        texto_header
-                    ):
-                        lista_avisos.append(Aviso(text, texto_header))
 
-        return lista_avisos
+                if isCategoriaRequerida(descripcion_aviso) and (
+                    self._es_aviso_baneado(text) or self._es_aviso_baneado(texto_header)
+                ):
+                    textos_y_encabezados.append((text, texto_header))
+
+        return textos_y_encabezados
 
     def _limpiar_header(self, td):
         text = td.get_text()

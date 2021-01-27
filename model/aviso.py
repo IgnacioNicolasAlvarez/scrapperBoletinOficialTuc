@@ -1,47 +1,34 @@
 from config import Config
-from helpers.expresionesRegularesF import (encontrarCapitalSocial,
-                                           encontrarCUIT,
-                                           encontrarFechaConstitucion,
-                                           encontrarIdTitulo,
-                                           encontrarTipoSociedad,
-                                           get_razon_social,
-                                           get_razon_social_aviso)
+from helpers.expresionesRegularesF import (
+    encontrarCapitalSocial,
+    encontrarCUIT,
+    encontrarFechaConstitucion,
+    encontrarIdTitulo,
+    encontrarTipoSociedad,
+    get_razon_social,
+    get_razon_social_aviso,
+)
 from helpers.for_categorias import get_tipo_categoria
 from helpers.helper import get_feature_from_tittle
 from helpers.helpers_fechas import obtener_fecha_format
 
 
 class Aviso:
-    def __init__(self, text, header_text):
-        encoded_text = text.encode("ascii", "ignore")
-        text = encoded_text.decode()
-        encoded_header_text = header_text.encode("ascii", "ignore")
-        header_text = encoded_header_text.decode()
+    def __init__(self, diccionario):
 
-        self.texto = text
-        self.nro_boletin = get_feature_from_tittle(
-            pattern=Config.REGEX_HEADER_0, text=header_text
-        )
-        self.fecha_aviso = obtener_fecha_format(
-            get_feature_from_tittle(pattern=Config.REGEX_HEADER_1, text=header_text)
-        )
-        self.nro_aviso = get_feature_from_tittle(
-            pattern=Config.REGEX_HEADER_2, text=header_text
-        )
-        self.id_tipo_aviso = get_tipo_categoria(
-            get_feature_from_tittle(pattern=Config.REGEX_HEADER_3, text=header_text)
-        )
-        self.razon_social = get_razon_social_aviso(text=text, header=header_text)
-        self.id_tipo_sociedad = encontrarTipoSociedad(header_text)
-        self.titulo = encontrarIdTitulo(text)
-        self.fechaConstitucion = encontrarFechaConstitucion(text)
-        self.id_titulo = encontrarIdTitulo(text)
-        self.CUIT = encontrarCUIT(text)
-        self.capitalSocial = (
-            encontrarCapitalSocial(text[:-30])
-            if (encontrarCapitalSocial(text) is not None)
-            else 0.00
-        )
+        self.texto = diccionario["texto"]
+        self.nro_boletin = diccionario["nro_boletin"]
+        self.fecha_aviso = diccionario["fecha_aviso"]
+        self.nro_aviso = diccionario["nro_aviso"]
+        self.id_tipo_aviso = diccionario["id_tipo_aviso"]
+        self.razon_social = diccionario["razon_social"]
+        self.id_tipo_sociedad = diccionario["id_tipo_sociedad"]
+        self.titulo = diccionario["titulo"]
+        self.fechaConstitucion = diccionario["fechaConstitucion"]
+        self.id_titulo = diccionario["id_titulo"]
+        self.CUIT = diccionario["CUIT"]
+        self.capitalSocial = diccionario["capitalSocial"]
+        self.fecha_carga = diccionario["fecha_carga"]
 
     def __str__(self):
         return self.razon_social

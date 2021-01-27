@@ -8,6 +8,7 @@ from tqdm import tqdm
 
 from model.extractor import Extractor
 from model.recolector import Recolector
+from model.factory import Aviso_Factory
 
 from .mails import MailSender
 
@@ -36,7 +37,10 @@ class Controlador:
 
         typer.secho("Empezando extraccion de datos de Avisos", fg=typer.colors.GREEN)
         extractor = Extractor()
-        avisos = extractor.extraer_datos_urls(urls)
+        datos_raw = extractor.extraer_datos_urls(urls)
+
+        factory = Aviso_Factory()
+        avisos = [factory.crear_aviso(raw_i) for raw_i in datos_raw]
 
         typer.secho("Empezando Almacenamiento de datos en BD", fg=typer.colors.GREEN)
         try:

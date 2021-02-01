@@ -18,6 +18,7 @@ class Estrategia:
 
 class Estrategia_Dummy(Estrategia):
     def persistir(self, aviso):
+        print(aviso)
         return 1
 
     def resetar_fecha(self, fechas):

@@ -31,4 +31,4 @@ class Aviso:
         self.fecha_carga = diccionario["fecha_carga"]
 
     def __str__(self):
-        return self.razon_social
+        return self.nombre_razon_social + "\n\n" + self.capitalSocial

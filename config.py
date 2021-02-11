@@ -29,6 +29,9 @@ def reiniciar_config():
 class Config:
     dotenv.load("./.env")
 
+    AZURE_TA_KEY = dotenv.get("AZURE_TA_KEY")
+    AZURE_TA_ENDPOINT = dotenv.get("AZURE_TA_ENDPOINT")
+
     HORA_EJECUCION = dotenv.get("HORA_EJECUCION")
 
     BAN_SOCIEDADES = obtener_avisos_excluidos("AVISOS_EXCLUIDOS.TXT")

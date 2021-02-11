@@ -1,0 +1,18 @@
+"category=Address"
+"subcategory=None"
+
+"category=Organization",
+"subcategory=None"
+
+"category=Person",
+"subcategory=None"
+
+"category=DateTime",
+"subcategory=Date",
+
+"category=Quantity",
+"subcategory=Currency",
+
+
+"category=Phone Number",
+"subcategory=None", cuit

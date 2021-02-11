@@ -12,15 +12,12 @@ from helpers.for_categorias import get_tipo_categoria
 from helpers.helper import get_feature_from_tittle
 from helpers.helpers_fechas import obtener_fecha_format
 
-from model.IA import NLP
+from model.Cliente_NLP import ClienteAzure
 
 from .aviso import Aviso
 
 
 class Aviso_Factory:
-    def __init__(self):
-        self.nlp = NLP()
-
     def crear_aviso(self, datos_raw):
         texto, header = datos_raw
 
@@ -48,12 +45,12 @@ class Aviso_Factory:
         diccionario_aviso["id_titulo"] = encontrarIdTitulo(texto)
         diccionario_aviso["CUIT"] = encontrarCUIT(texto)
 
-        diccionario_aviso["capitalSocial"] = self.nlp.extraer_capital_social(
-            pregunta="¿monto capital social?",
-            texto=texto.replace(".", "").lower(),
-        )
-        
+        diccionario_aviso["capitalSocial"] = 0
         diccionario_aviso["fecha_carga"] = obtener_fecha_format()
+
+        cliente_azure = ClienteAzure()
+        print(cliente_azure.extraer_entidades_nombradas(texto))
+
 
         return self._crear_aviso(diccionario_aviso)
 

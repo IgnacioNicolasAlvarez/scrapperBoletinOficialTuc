@@ -1,7 +1,7 @@
 from azure.ai.textanalytics import TextAnalyticsClient
 from azure.core.credentials import AzureKeyCredential
-
 from config import Config
+
 
 class ClienteAzure:
     def __init__(self):

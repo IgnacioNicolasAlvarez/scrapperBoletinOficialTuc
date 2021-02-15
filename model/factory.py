@@ -13,6 +13,7 @@ from helpers.helper import get_feature_from_tittle
 from helpers.helpers_fechas import obtener_fecha_format
 
 from model.Cliente_NLP import ClienteAzure
+from helpers.preprocesador_texto import preprocesar
 
 from .aviso import Aviso
 
@@ -44,13 +45,15 @@ class Aviso_Factory:
         diccionario_aviso["fechaConstitucion"] = encontrarFechaConstitucion(texto)
         diccionario_aviso["id_titulo"] = encontrarIdTitulo(texto)
         diccionario_aviso["CUIT"] = encontrarCUIT(texto)
-
-        diccionario_aviso["capitalSocial"] = 0
         diccionario_aviso["fecha_carga"] = obtener_fecha_format()
 
-        cliente_azure = ClienteAzure()
-        print(cliente_azure.extraer_entidades_nombradas(texto))
-
+        cliente = ClienteAzure()
+        entidades = cliente.extraer_entidades(preprocesar(texto))
+        diccionario_aviso["capitalSocial"] = cliente.extraer_capital_social(
+            entidades
+        )
+        diccionario_aviso["nombres"] = cliente.extraer_nombres(entidades)
+        diccionario_aviso["direccion"] = cliente.extraer_direccion(entidades)
 
         return self._crear_aviso(diccionario_aviso)
 

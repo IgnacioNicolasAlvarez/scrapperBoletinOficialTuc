@@ -17,16 +17,20 @@ class ClienteAzure:
         cliente = self._autenticar()
         try:
             # is_error = False
-            return cliente.recognize_entities(documents=[texto])[0].entities
+            entidades = cliente.recognize_entities(documents=[texto])[0].entities 
+            return entidades
         except Exception as err:
-            return None
+            return []
 
     def extraer_capital_social(self, entidades):
         capital_social = 0
         for ent in entidades:
             if ent.category == "Quantity" and ent.subcategory == "Currency":
                 if "$" in ent.text:
-                    aux = float(ent.text.replace("$", ""))
+                    try:
+                        aux = float(ent.text.replace("$", ""))
+                    except:
+                        aux = 0
                     capital_social = (
                         aux if aux > capital_social and aux > 5000 else capital_social
                     )

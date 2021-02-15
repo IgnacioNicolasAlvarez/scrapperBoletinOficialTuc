@@ -27,8 +27,10 @@ class Aviso:
         self.fechaConstitucion = diccionario["fechaConstitucion"]
         self.id_titulo = diccionario["id_titulo"]
         self.CUIT = diccionario["CUIT"]
-        self.capitalSocial = diccionario["capitalSocial"]
         self.fecha_carga = diccionario["fecha_carga"]
+        self.capitalSocial = diccionario["capitalSocial"]
+        self.nombres = diccionario["nombres"]
+        self.direccion = diccionario["direccion"]
 
     def __str__(self):
         return self.nombre_razon_social + "\n\n" + self.capitalSocial

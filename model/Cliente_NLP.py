@@ -16,8 +16,10 @@ class ClienteAzure:
     def extraer_entidades(self, texto):
         cliente = self._autenticar()
         try:
-            # is_error = False
-            entidades = cliente.recognize_entities(documents=[texto])[0].entities 
+            if len(texto.split()) >= Config.AZURE_LIMITE_CARACTERES:
+                texto = " ".join(texto.split()[len(texto) // 25 :])
+           
+            entidades = cliente.recognize_entities(documents=[texto])[0].entities
             return entidades
         except Exception as err:
             return []

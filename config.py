@@ -38,6 +38,8 @@ class Config:
 
     BAN_SOCIEDADES = obtener_avisos_excluidos("AVISOS_EXCLUIDOS.TXT")
 
+    AZURE_LIMITE_CARACTERES = dotenv.get("AZURE_LIMITE_CARACTERES")
+
     PATRONES_RAZON_SOCIAL = [
         r"SOCIEDADES\s.*\"(.*)\"",
         r'SOCIEDADES\s\/\s.*\"(.*)\" \(CONSTITUCIÓN\)"*',

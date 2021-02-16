@@ -46,8 +46,8 @@ class Controlador:
         try:
             persistencia = Persistencia(
                 [
-                    # Estrategia_Dummy(),
-                    Estatregia_Mongo(Config.DB_MONGO),
+                    Estrategia_Dummy(),
+                    # Estatregia_Mongo(Config.DB_MONGO),
                     # Estrategia_SQL(Config.DB_PROD)
                 ]
             )
